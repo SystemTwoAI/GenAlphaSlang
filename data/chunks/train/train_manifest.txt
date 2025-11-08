@@ -1,0 +1,17 @@
+Original file: train.csv
+Total size: 428.50 MB
+Total rows: 99086
+Total chunks: 10
+Columns: conversations, id
+
+Chunks:
+  train_chunk_000.csv: rows 0-11009 (11009 rows, 47.57 MB)
+  train_chunk_001.csv: rows 11009-22018 (11009 rows, 47.60 MB)
+  train_chunk_002.csv: rows 22018-33027 (11009 rows, 47.59 MB)
+  train_chunk_003.csv: rows 33027-44036 (11009 rows, 47.74 MB)
+  train_chunk_004.csv: rows 44036-55045 (11009 rows, 47.55 MB)
+  train_chunk_005.csv: rows 55045-66054 (11009 rows, 47.64 MB)
+  train_chunk_006.csv: rows 66054-77063 (11009 rows, 47.55 MB)
+  train_chunk_007.csv: rows 77063-88072 (11009 rows, 47.62 MB)
+  train_chunk_008.csv: rows 88072-99081 (11009 rows, 47.62 MB)
+  train_chunk_009.csv: rows 99081-99086 (5 rows, 0.02 MB)

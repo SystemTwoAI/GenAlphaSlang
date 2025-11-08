@@ -78,7 +78,7 @@ python scripts/chunk_data_directory.py
 python scripts/chunk_csv.py data/your_file.csv --chunk-size 50
 ```
 
-The chunked dataset is already available in `data/chunks/train/` (10 chunks of ~48MB each).
+The chunked dataset is available in `data/chunks/train/` (10 chunks of ~48MB each).
 
 ### 3. Set Up API Keys
 
