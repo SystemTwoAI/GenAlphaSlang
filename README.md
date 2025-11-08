@@ -46,6 +46,20 @@ pip install -r requirements.txt
 2. Extract the CSV file(s) to the `data/` directory
 3. The data directory is gitignored due to file size
 
+**Optional: Chunk Dataset for Git Storage**
+
+If you want to version control the dataset, use the chunking scripts to split large CSV files into smaller pieces:
+
+```bash
+# Chunk all CSV files in data/ directory
+python scripts/chunk_data_directory.py
+
+# Or chunk a specific file
+python scripts/chunk_csv.py data/your_file.csv --chunk-size 50
+```
+
+See [DATA_CHUNKING.md](DATA_CHUNKING.md) for detailed instructions.
+
 ### 3. Set Up API Keys
 
 For model evaluation, you'll need API access to the models you want to test:
