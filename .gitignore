@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Data files - datasets are too large for git
+data/
+*.csv
+*.zip
