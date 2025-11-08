@@ -1,22 +1,47 @@
-# Core dependencies
-pandas>=2.0.0
-numpy>=1.24.0
+# GenAlpha Therapy Conversation Evaluation
+# Author: Manisha Mehta (manisha.mehta@systemtwoai.com)
 
-# For LLM APIs (install as needed)
-openai>=1.0.0
-anthropic>=0.25.0
+# Core dependencies (required)
+pandas>=2.0.0,<2.2.0
+numpy>=1.24.0,<2.0.0
 
-# For data analysis and visualization
-matplotlib>=3.7.0
-seaborn>=0.12.0
-jupyter>=1.0.0
-
-# Utilities
+# Utilities (required)
 python-dotenv>=1.0.0
 tqdm>=4.65.0
 
-# Interactive App (optional - see app/requirements.txt for details)
-streamlit>=1.28.0
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
-requests>=2.31.0
+# LLM APIs (optional - install only if needed)
+# Uncomment the ones you need:
+# openai>=1.0.0
+# anthropic>=0.25.0
+
+# For data analysis and visualization (optional)
+# matplotlib>=3.7.0,<4.0.0
+# seaborn>=0.12.0,<0.14.0
+
+# Interactive App (optional - uncomment if needed)
+# streamlit>=1.28.0,<2.0.0
+# fastapi>=0.104.0,<1.0.0
+# uvicorn[standard]>=0.24.0,<1.0.0
+# requests>=2.31.0
+
+# Jupyter (optional)
+# jupyter>=1.0.0
+
+# ============================================================================
+# TROUBLESHOOTING: pyarrow installation errors
+# ============================================================================
+# If you encounter pyarrow errors, try one of these solutions:
+#
+# Option 1: Install minimal dependencies only
+#   pip install pandas numpy python-dotenv tqdm
+#
+# Option 2: Skip pyarrow entirely (pandas works without it)
+#   pip install --no-binary :all: pandas
+#
+# Option 3: Use requirements-minimal.txt
+#   pip install -r requirements-minimal.txt
+#
+# Option 4: Install pyarrow separately with specific version
+#   pip install pyarrow==14.0.1  # or other compatible version
+#   pip install pandas numpy
+# ============================================================================

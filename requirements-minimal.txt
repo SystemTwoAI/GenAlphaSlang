@@ -1,0 +1,11 @@
+# Core dependencies (minimal install)
+pandas>=2.0.0,<2.2.0
+numpy>=1.24.0,<2.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.65.0
+
+# Note: pyarrow is optional for pandas and may cause install issues
+# If you encounter pyarrow errors, you can skip it - pandas works without it
+# To explicitly avoid pyarrow: pip install --no-deps pandas
