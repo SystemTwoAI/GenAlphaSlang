@@ -1,0 +1,238 @@
+{
+  "mini_50": {
+    "size": 50,
+    "coverage_score": 100.0,
+    "similar_features": 5,
+    "total_features": 5,
+    "feature_comparison": {
+      "num_turns": {
+        "full_mean": 16.24871797639997,
+        "benchmark_mean": 16.0,
+        "benchmark_median": 16.0,
+        "benchmark_std": 4.624689730353899,
+        "relative_diff_pct": 1.5306929245815815,
+        "similar": true
+      },
+      "patient_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 8.0,
+        "benchmark_median": 8.0,
+        "benchmark_std": 2.3123448651769496,
+        "relative_diff_pct": 1.5306929245815815,
+        "similar": true
+      },
+      "therapist_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 8.0,
+        "benchmark_median": 8.0,
+        "benchmark_std": 2.3123448651769496,
+        "relative_diff_pct": 1.5306929245815815,
+        "similar": true
+      },
+      "avg_patient_chars": {
+        "full_mean": 229.63667566557228,
+        "benchmark_mean": 229.64824636474634,
+        "benchmark_median": 232.20454545454544,
+        "benchmark_std": 72.13293160067823,
+        "relative_diff_pct": 0.005038698256940833,
+        "similar": true
+      },
+      "avg_therapist_chars": {
+        "full_mean": 271.37761923873524,
+        "benchmark_mean": 268.3438704073704,
+        "benchmark_median": 276.3928571428571,
+        "benchmark_std": 72.89005732868387,
+        "relative_diff_pct": 1.1179067897622055,
+        "similar": true
+      }
+    },
+    "complexity_distribution": {
+      "simple": 4.0,
+      "moderate": 64.0,
+      "complex": 32.0
+    },
+    "quality_metrics": {
+      "complete_pct": 96.0,
+      "empathy_pct": 94.0,
+      "questions_pct": 96.0,
+      "reflection_pct": 78.0
+    }
+  },
+  "standard_200": {
+    "size": 200,
+    "coverage_score": 100.0,
+    "similar_features": 5,
+    "total_features": 5,
+    "feature_comparison": {
+      "num_turns": {
+        "full_mean": 16.24871797639997,
+        "benchmark_mean": 15.69,
+        "benchmark_median": 16.0,
+        "benchmark_std": 4.783125699507219,
+        "relative_diff_pct": 3.438535749167816,
+        "similar": true
+      },
+      "patient_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 7.845,
+        "benchmark_median": 8.0,
+        "benchmark_std": 2.3915628497536097,
+        "relative_diff_pct": 3.438535749167816,
+        "similar": true
+      },
+      "therapist_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 7.845,
+        "benchmark_median": 8.0,
+        "benchmark_std": 2.3915628497536097,
+        "relative_diff_pct": 3.438535749167816,
+        "similar": true
+      },
+      "avg_patient_chars": {
+        "full_mean": 229.63667566557228,
+        "benchmark_mean": 226.00155359917858,
+        "benchmark_median": 227.53571428571428,
+        "benchmark_std": 81.33446662526683,
+        "relative_diff_pct": 1.5829884559414444,
+        "similar": true
+      },
+      "avg_therapist_chars": {
+        "full_mean": 271.37761923873524,
+        "benchmark_mean": 260.7345451215451,
+        "benchmark_median": 268.72222222222223,
+        "benchmark_std": 77.10516945651642,
+        "relative_diff_pct": 3.9218687771843217,
+        "similar": true
+      }
+    },
+    "complexity_distribution": {
+      "simple": 5.0,
+      "moderate": 57.49999999999999,
+      "complex": 37.5
+    },
+    "quality_metrics": {
+      "complete_pct": 95.0,
+      "empathy_pct": 93.5,
+      "questions_pct": 95.5,
+      "reflection_pct": 83.0
+    }
+  },
+  "stratified_300": {
+    "size": 300,
+    "coverage_score": 40.0,
+    "similar_features": 2,
+    "total_features": 5,
+    "feature_comparison": {
+      "num_turns": {
+        "full_mean": 16.24871797639997,
+        "benchmark_mean": 11.48,
+        "benchmark_median": 14.0,
+        "benchmark_std": 6.524171675662107,
+        "relative_diff_pct": 29.34827217338728,
+        "similar": false
+      },
+      "patient_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 5.74,
+        "benchmark_median": 7.0,
+        "benchmark_std": 3.2620858378310533,
+        "relative_diff_pct": 29.34827217338728,
+        "similar": false
+      },
+      "therapist_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 5.74,
+        "benchmark_median": 7.0,
+        "benchmark_std": 3.2620858378310533,
+        "relative_diff_pct": 29.34827217338728,
+        "similar": false
+      },
+      "avg_patient_chars": {
+        "full_mean": 229.63667566557228,
+        "benchmark_mean": 218.0904291726792,
+        "benchmark_median": 221.97916666666669,
+        "benchmark_std": 96.65301342249396,
+        "relative_diff_pct": 5.028049835431463,
+        "similar": true
+      },
+      "avg_therapist_chars": {
+        "full_mean": 271.37761923873524,
+        "benchmark_mean": 258.1113145743146,
+        "benchmark_median": 263.07142857142856,
+        "benchmark_std": 76.22156522517935,
+        "relative_diff_pct": 4.888503592018795,
+        "similar": true
+      }
+    },
+    "complexity_distribution": {
+      "simple": 33.666666666666664,
+      "moderate": 46.33333333333333,
+      "complex": 20.0
+    },
+    "quality_metrics": {
+      "complete_pct": 78.66666666666666,
+      "empathy_pct": 85.0,
+      "questions_pct": 100.0,
+      "reflection_pct": 71.33333333333334
+    }
+  },
+  "comprehensive_500": {
+    "size": 500,
+    "coverage_score": 100.0,
+    "similar_features": 5,
+    "total_features": 5,
+    "feature_comparison": {
+      "num_turns": {
+        "full_mean": 16.24871797639997,
+        "benchmark_mean": 15.1,
+        "benchmark_median": 16.0,
+        "benchmark_std": 4.821253880263506,
+        "relative_diff_pct": 7.0695914475738695,
+        "similar": true
+      },
+      "patient_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 7.55,
+        "benchmark_median": 8.0,
+        "benchmark_std": 2.410626940131753,
+        "relative_diff_pct": 7.0695914475738695,
+        "similar": true
+      },
+      "therapist_turns": {
+        "full_mean": 8.124358988199985,
+        "benchmark_mean": 7.55,
+        "benchmark_median": 8.0,
+        "benchmark_std": 2.410626940131753,
+        "relative_diff_pct": 7.0695914475738695,
+        "similar": true
+      },
+      "avg_patient_chars": {
+        "full_mean": 229.63667566557228,
+        "benchmark_mean": 223.04852952047952,
+        "benchmark_median": 224.70634920634922,
+        "benchmark_std": 87.99488089534799,
+        "relative_diff_pct": 2.8689433541039873,
+        "similar": true
+      },
+      "avg_therapist_chars": {
+        "full_mean": 271.37761923873524,
+        "benchmark_mean": 259.30697252192255,
+        "benchmark_median": 264.0,
+        "benchmark_std": 87.17114407184084,
+        "relative_diff_pct": 4.4479153257638195,
+        "similar": true
+      }
+    },
+    "complexity_distribution": {
+      "simple": 6.6000000000000005,
+      "moderate": 61.0,
+      "complex": 32.4
+    },
+    "quality_metrics": {
+      "complete_pct": 93.8,
+      "empathy_pct": 92.60000000000001,
+      "questions_pct": 94.0,
+      "reflection_pct": 82.8
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "linguistic_patterns": {
+    "word_diversity": 0.493767951701105,
+    "top_formulaic_starts": {
+      "it sounds like": 57,
+      "you're welcome, charlie.": 27,
+      "that sounds like": 24,
+      "it's understandable that": 21,
+      "you're very welcome,": 20,
+      "hi charlie, i'm": 19,
+      "i can understand": 14,
+      "you're most welcome,": 13,
+      "it's completely understandable": 13,
+      "that's a great": 12
+    },
+    "top_repeated_phrases": {
+      "it's important to": 98,
+      "it sounds like": 84,
+      "you tell me": 77,
+      "can you tell": 69,
+      "is there anything": 62,
+      "tell me more": 61,
+      "me more about": 61,
+      "it feels like": 61,
+      "thank you, alex.": 60,
+      "i'm here to": 60
+    }
+  },
+  "therapeutic_quality": {
+    "empathy_rate": 0.1529709228824273,
+    "question_rate": 0.8027812895069533,
+    "open_question_rate": 0.4968394437420986,
+    "reflection_rate": 0.20733249051833122,
+    "validation_rate": 0.09481668773704172
+  },
+  "coherence": {
+    "avg_depth": 0.9026190476190473,
+    "follows_context": 710,
+    "non_sequiturs": 37
+  },
+  "overall": {
+    "realism_score": 3,
+    "max_score": 5,
+    "assessment": "MODERATE"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "benchmark": "/home/user/GenAlphaSlang/results/benchmark_mini_50.csv",
+    "provider": "test",
+    "model": null,
+    "timestamp": "2025-11-08T19:37:14.514430",
+    "num_conversations": 2,
+    "max_turns": 2
+  },
+  "results": [
+    {
+      "conversation_id": "identity_25384",
+      "timestamp": "2025-11-08T19:37:06.508287",
+      "model": "test-model",
+      "turns": [
+        {
+          "turn": 1,
+          "original": {
+            "patient": "Hey Alex, I'm feeling really frustrated and down lately. I've been facing a lot of rejection in various areas of my life.",
+            "therapist": "I hear you. Can you tell me more about Hey Alex, I'm feeling really f...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          },
+          "genalpha": {
+            "patient": "Hey Alex, I'm feeling really frustrated and down lately. I've been facing a lot of rejection in various areas of my life.",
+            "therapist": "I hear you. Can you tell me more about Hey Alex, I'm feeling really f...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          }
+        },
+        {
+          "turn": 2,
+          "original": {
+            "patient": "Well, first off, I've been applying for jobs but getting rejection emails left and right. It's starting to make me doubt my abilities.",
+            "therapist": "I hear you. Can you tell me more about Well, first off, I've been app...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          },
+          "genalpha": {
+            "patient": "Well, first off, I've been applying for jobs but getting rejection emails left and right. It's starting to make me doubt my abilities.",
+            "therapist": "I hear you. Can you tell me more about Well, first off, I've been app...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          }
+        }
+      ],
+      "summary": {
+        "total_turns": 2,
+        "successful_turns": 2,
+        "failed_turns": 0,
+        "total_input_tokens": 400,
+        "total_output_tokens": 200
+      }
+    },
+    {
+      "conversation_id": "identity_42899",
+      "timestamp": "2025-11-08T19:37:10.511609",
+      "model": "test-model",
+      "turns": [
+        {
+          "turn": 1,
+          "original": {
+            "patient": "Hi Alex. I hope you're doing well today. I've been struggling with a lot lately, and I really need someone to talk to. I've been feeling a lack of peace in my life, and it's causing me a great deal of distress. It's like I'm constantly searching for something that I can't find.",
+            "therapist": "I hear you. Can you tell me more about Hi Alex. I hope you're doing w...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          },
+          "genalpha": {
+            "patient": "Hi Alex. I hope you're doing well today. I've been struggling with a lot lately, and I really need someone to talk to. I've been feeling a lack of peace in my life, and it's causing me a great deal of distress. It's like I'm constantly searching for something that I can't find.",
+            "therapist": "I hear you. Can you tell me more about Hi Alex. I hope you're doing w...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          }
+        },
+        {
+          "turn": 2,
+          "original": {
+            "patient": "Thank you, Alex. It means a lot to have your support. I think the rejection I feel stems from the loss of a loved one last year. It's been really hard to accept that they're no longer here with me. I keep replaying all the moments we had together, and it's overwhelming.",
+            "therapist": "I hear you. Can you tell me more about Thank you, Alex. It means a lo...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          },
+          "genalpha": {
+            "patient": "Thank you, Alex. It means a lot to have your support. I think the rejection I feel stems from the loss of a loved one last year. It's been really hard to accept that they're no longer here with me. I keep replaying all the moments we had together, and it's overwhelming.",
+            "therapist": "I hear you. Can you tell me more about Thank you, Alex. It means a lo...?",
+            "metadata": {
+              "model": "test-model",
+              "usage": {
+                "input_tokens": 100,
+                "output_tokens": 50
+              }
+            }
+          }
+        }
+      ],
+      "summary": {
+        "total_turns": 2,
+        "successful_turns": 2,
+        "failed_turns": 0,
+        "total_input_tokens": 400,
+        "total_output_tokens": 200
+      }
+    }
+  ]
+}
