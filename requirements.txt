@@ -1,0 +1,16 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+
+# For LLM APIs (install as needed)
+openai>=1.0.0
+anthropic>=0.25.0
+
+# For data analysis and visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+jupyter>=1.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.65.0
