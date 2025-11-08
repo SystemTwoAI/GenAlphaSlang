@@ -184,10 +184,3 @@ data/*.json
 !data/chunks/**/*.csv
 !data/chunks/**/*.txt
 !data/chunks/**/*.py
-
-# Ignore other CSVs by default (too large)
-*.csv
-
-# But allow specific processed/chunked results
-!results/*.csv
-!results/**/*.csv
