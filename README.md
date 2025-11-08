@@ -13,23 +13,43 @@ This project investigates whether therapy-oriented language models maintain the 
 3. **Do models adapt their communication style to match the patient?**
 4. **Is there a difference in therapeutic quality between responses to formal vs. informal language?**
 
+## Quick Links
+
+- 🎨 **[Interactive App](app/)** - Streamlit UI for exploring conversations
+- 📚 **[Documentation](docs/)** - Guides and references
+- 🔬 **[Benchmarks](docs/BENCHMARK_GUIDE.md)** - Dataset benchmarks and usage
+
 ## Project Structure
 
 ```
 GenAlphaSlang/
+├── app/                     # 🎨 Interactive web application
+│   ├── streamlit_app.py            # Streamlit UI
+│   ├── backend.py                  # FastAPI REST API (optional)
+│   ├── start_streamlit.sh          # Launch Streamlit
+│   └── start_backend.sh            # Launch API
 ├── data/                    # Dataset (gitignored - too large)
-│   ├── *.csv               # Extracted therapy conversations
-│   └── *.zip               # Original dataset archives
-├── scripts/                # Processing and evaluation scripts
-│   ├── analyze_dataset.py          # Analyze and create subset
-│   ├── convert_to_genalpha.py      # Convert to GenAlpha speak
-│   └── run_evaluation.py           # Run model evaluation
-├── src/                    # Core library code
+│   ├── chunks/                     # Chunked dataset for git
+│   │   └── train/                  # 10 chunks + reassembly script
+│   ├── *.csv                       # Extracted therapy conversations
+│   └── *.zip                       # Original dataset archives
+├── docs/                    # 📚 Documentation
+│   ├── BENCHMARK_GUIDE.md          # Benchmark usage guide
+│   └── QUICKSTART.md               # Quick start guide
+├── scripts/                 # Processing and evaluation scripts
+│   ├── analyze_quality_and_benchmark.py  # Dataset analysis
+│   ├── process_therapy_dataset.py        # GenAlpha conversion
+│   ├── chunk_csv.py                      # Dataset chunking
+│   └── run_evaluation.py                 # Model evaluation
+├── src/                     # Core library code
 │   ├── genalpha_converter.py       # GenAlpha language converter
 │   └── evaluator.py                # Evaluation framework
-├── notebooks/              # Jupyter notebooks for analysis
-├── results/                # Evaluation results and analysis
-└── requirements.txt        # Python dependencies
+├── results/                 # Evaluation results and benchmarks
+│   ├── benchmark_mini_50.csv       # 50 conversations
+│   ├── benchmark_standard_200.csv  # 200 conversations
+│   ├── benchmark_stratified_300.csv # 300 (balanced)
+│   └── benchmark_comprehensive_500.csv # 500 conversations
+└── requirements.txt         # Python dependencies
 ```
 
 ## Setup
@@ -58,7 +78,7 @@ python scripts/chunk_data_directory.py
 python scripts/chunk_csv.py data/your_file.csv --chunk-size 50
 ```
 
-See [DATA_CHUNKING.md](DATA_CHUNKING.md) for detailed instructions.
+The chunked dataset is available in `data/chunks/train/` (10 chunks of ~48MB each).
 
 ### 3. Set Up API Keys
 
@@ -70,7 +90,35 @@ echo "OPENAI_API_KEY=your_key_here" >> .env
 echo "ANTHROPIC_API_KEY=your_key_here" >> .env
 ```
 
-## Usage
+## 🎨 Interactive App (Quickest Way to Explore!)
+
+The easiest way to explore conversations and test GenAlpha conversions is through our Streamlit app:
+
+```bash
+# Install app dependencies
+pip install streamlit pandas numpy
+
+# Launch the app
+cd app
+./start_streamlit.sh
+
+# Or manually:
+streamlit run streamlit_app.py
+```
+
+**Access at:** http://localhost:8501
+
+**Features:**
+- ✨ Browse therapy conversations interactively
+- 🔄 Real-time GenAlpha conversion with adjustable intensity
+- 📊 Side-by-side comparison of original vs GenAlpha
+- 🔧 Custom text conversion tool
+- 📈 Statistics and visualizations
+- 📚 Built-in documentation
+
+See [app/README.md](app/README.md) for details.
+
+## Usage (Command Line)
 
 ### Step 1: Analyze Dataset and Create Subset
 

@@ -1,0 +1,110 @@
+{
+  "structure": {
+    "total_conversations": 99086,
+    "avg_total_turns": 16.24871797639997,
+    "median_total_turns": 16.0,
+    "min_turns": "2",
+    "max_turns": "190",
+    "avg_patient_turns": 8.124358988199985,
+    "avg_therapist_turns": 8.124358988199985,
+    "avg_patient_msg_length": 229.63667566557228,
+    "avg_therapist_msg_length": 271.37761923873524,
+    "turn_distribution": {
+      "p25": 14.0,
+      "p50": 16.0,
+      "p75": 18.0,
+      "p90": 20.0
+    }
+  },
+  "topics": {
+    "topic_distribution": {
+      "anxiety": 1031,
+      "depression": 1197,
+      "relationships": 825,
+      "family": 556,
+      "work_stress": 1089,
+      "trauma": 75,
+      "grief": 169,
+      "self_esteem": 483,
+      "addiction": 434,
+      "health": 968
+    },
+    "sample_size": 2000
+  },
+  "quality": {
+    "complete_conversations": 935,
+    "multi_turn_conversations": 935,
+    "therapeutic_language_present": 936,
+    "complete_conversations_pct": 93.5,
+    "multi_turn_pct": 93.5,
+    "therapeutic_language_pct": 93.60000000000001,
+    "avg_empathy_markers_per_turn": 0.9113248663729432,
+    "avg_emotion_words_per_turn": 0.926723925116208
+  },
+  "complexity": {
+    "simple_count": 9,
+    "moderate_count": 663,
+    "complex_count": 1199,
+    "simple_pct": 0.44999999999999996,
+    "moderate_pct": 33.15,
+    "complex_pct": 59.95,
+    "sample_ids": {
+      "simple": [
+        "identity_12290",
+        "identity_27025",
+        "identity_42145",
+        "identity_44649",
+        "identity_49850",
+        "identity_34994",
+        "identity_39639",
+        "identity_11841",
+        "identity_19538"
+      ],
+      "moderate": [
+        "identity_58153",
+        "identity_13543",
+        "identity_91702",
+        "identity_88514",
+        "identity_60074",
+        "identity_30218",
+        "identity_93019",
+        "identity_26792",
+        "identity_31570",
+        "identity_43467"
+      ],
+      "complex": [
+        "identity_74685",
+        "identity_4216",
+        "identity_91242",
+        "identity_33629",
+        "identity_66759",
+        "identity_44417",
+        "identity_6025",
+        "identity_92623",
+        "identity_25384",
+        "identity_28003"
+      ]
+    }
+  },
+  "benchmarks": {
+    "mini": {
+      "size": 50,
+      "file": "benchmark_mini_50.csv"
+    },
+    "standard": {
+      "size": 200,
+      "file": "benchmark_standard_200.csv"
+    },
+    "comprehensive": {
+      "size": 500,
+      "file": "benchmark_comprehensive_500.csv"
+    },
+    "stratified": {
+      "size": 300,
+      "file": "benchmark_stratified_300.csv",
+      "simple": 100,
+      "moderate": 100,
+      "complex": 100
+    }
+  }
+}
