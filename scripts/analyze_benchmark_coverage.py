@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Analyze benchmark coverage to ensure it's representative of the full dataset.
+
+Author: Manisha Mehta (manisha.mehta@systemtwoai.com)
+Date: November 2025
 """
 
 import json

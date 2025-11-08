@@ -2,6 +2,9 @@
 """
 Demonstrate how Claude would respond as a therapist to sample conversations.
 This script shows example patient messages and demonstrates appropriate therapeutic responses.
+
+Author: Manisha Mehta (manisha.mehta@systemtwoai.com)
+Date: November 2025
 """
 
 import json
