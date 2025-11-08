@@ -9,6 +9,10 @@ numpy>=1.24.0
 python-dotenv>=1.0.0
 tqdm>=4.65.0
 
+# Optional: pyarrow for faster pandas operations
+# Uncomment if it builds successfully on your system (version 22.0.0 works well)
+# pyarrow>=14.0.0
+
 # LLM APIs (optional - install only if needed)
 # Uncomment the ones you need:
 # openai>=1.0.0
@@ -42,6 +46,6 @@ tqdm>=4.65.0
 #   pip install -r requirements-minimal.txt
 #
 # Option 4: Install pyarrow separately with specific version
-#   pip install pyarrow==14.0.1  # or other compatible version
+#   pip install pyarrow==22.0.0  # version 22.0.0 confirmed working
 #   pip install pandas numpy
 # ============================================================================
