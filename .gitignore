@@ -191,3 +191,7 @@ data/*.json
 # But allow specific processed/chunked results
 !results/*.csv
 !results/**/*.csv
+
+# Exclude evaluation sessions (runtime data)
+results/evaluation_sessions/
+results/llm_evaluations/
