@@ -2,6 +2,9 @@
 """
 Evaluate LLM responses to therapy conversations (original vs GenAlpha).
 Supports multiple LLM providers: Anthropic Claude, OpenAI, etc.
+
+Author: Manisha Mehta (manisha.mehta@systemtwoai.com)
+Date: November 2025
 """
 
 import json

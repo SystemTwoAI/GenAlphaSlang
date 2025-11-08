@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Analyze therapy conversations for realism and quality.
+
+Author: Manisha Mehta (manisha.mehta@systemtwoai.com)
+Date: November 2025
 """
 
 import json
