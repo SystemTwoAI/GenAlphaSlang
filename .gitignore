@@ -172,3 +172,22 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Data files - datasets are too large for git
+# Ignore original data directory contents (large files)
+data/*.csv
+data/*.zip
+data/*.json
+
+# But allow chunked data (small files safe for git)
+!data/chunks/
+!data/chunks/**/*.csv
+!data/chunks/**/*.txt
+!data/chunks/**/*.py
+
+# Ignore other CSVs by default (too large)
+*.csv
+
+# But allow specific processed/chunked results
+!results/*.csv
+!results/**/*.csv
