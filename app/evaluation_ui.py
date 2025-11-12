@@ -193,17 +193,34 @@ def evaluation_page():
 
             max_turns = st.slider("Number of Turns", 1, 10, 5)
 
+            # Show intensity slider only if GenAlpha is selected
+            genalpha_intensity = 0.7
+            if version == "GenAlpha":
+                genalpha_intensity = st.slider(
+                    "GenAlpha Intensity",
+                    min_value=0.3,
+                    max_value=1.0,
+                    value=0.7,
+                    step=0.1,
+                    help="Higher values = more slang transformations"
+                )
+
             if st.button("Load Conversation"):
                 # Load the conversation
                 row = df[df['id'] == selected_id].iloc[0]
                 conversation = parse_conversation(row['conversations'])
+
+                # Determine if GenAlpha version
+                use_genalpha = (version == "GenAlpha")
 
                 # Create evaluation turns
                 evaluation_turns = st.session_state.evaluator.create_evaluation_turns(
                     conversation,
                     max_turns=max_turns,
                     generate_options=True,
-                    num_options=3
+                    num_options=3,
+                    is_genalpha=use_genalpha,
+                    genalpha_intensity=genalpha_intensity
                 )
 
                 # Start session
@@ -212,7 +229,7 @@ def evaluation_page():
                     evaluator_id=st.session_state.evaluator_id,
                     evaluator_type=st.session_state.evaluator_type,
                     evaluation_turns=evaluation_turns,
-                    is_genalpha=(version == "GenAlpha")
+                    is_genalpha=use_genalpha
                 )
 
                 st.session_state.current_conversation = selected_id

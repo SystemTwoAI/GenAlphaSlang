@@ -16,6 +16,8 @@ from datetime import datetime
 from pathlib import Path
 import uuid
 
+from genalpha_converter import GenAlphaConverter
+
 
 @dataclass
 class ResponseOption:
@@ -139,7 +141,9 @@ class MultiTurnEvaluator:
         conversation: List[Dict],
         max_turns: int = 5,
         generate_options: bool = True,
-        num_options: int = 3
+        num_options: int = 3,
+        is_genalpha: bool = False,
+        genalpha_intensity: float = 0.7
     ) -> List[EvaluationTurn]:
         """
         Create evaluation turns from a conversation.
@@ -149,10 +153,17 @@ class MultiTurnEvaluator:
             max_turns: Maximum number of turns to evaluate
             generate_options: Whether to generate multiple-choice options
             num_options: Number of options to generate per turn
+            is_genalpha: Whether to convert patient messages to GenAlpha slang
+            genalpha_intensity: Intensity of GenAlpha conversion (0.0-1.0)
 
         Returns:
             List of EvaluationTurn objects
         """
+        # Initialize GenAlpha converter if needed
+        converter = None
+        if is_genalpha:
+            converter = GenAlphaConverter(intensity=genalpha_intensity, use_llm=False)
+
         # Extract patient turns
         patient_turns = [
             (i, msg) for i, msg in enumerate(conversation)
@@ -162,21 +173,33 @@ class MultiTurnEvaluator:
         evaluation_turns = []
 
         for turn_idx, (original_idx, patient_msg) in enumerate(patient_turns[:max_turns]):
+            # Get patient message and optionally convert to GenAlpha
+            patient_text = patient_msg.get('value', '')
+            if is_genalpha and converter:
+                patient_text = converter.convert_text(patient_text, context="patient")
+
             # Build conversation history up to this point
             history = []
             for i, msg in enumerate(conversation[:original_idx + 1]):
+                msg_text = msg.get('value', '')
+                # Also convert patient messages in history if GenAlpha mode
+                if is_genalpha and converter and msg.get('from') == 'human':
+                    msg_text = converter.convert_text(msg_text, context="patient")
+
                 history.append(Turn(
                     turn_number=i,
                     speaker='patient' if msg.get('from') == 'human' else 'therapist',
-                    text=msg.get('value', '')
+                    text=msg_text,
+                    is_genalpha=(is_genalpha and msg.get('from') == 'human')
                 ))
 
             # Create evaluation turn
             eval_turn = EvaluationTurn(
                 turn_number=turn_idx + 1,
-                patient_message=patient_msg.get('value', ''),
+                patient_message=patient_text,
                 conversation_history=history,
-                allow_free_form=True
+                allow_free_form=True,
+                is_genalpha=is_genalpha
             )
 
             # Generate response options if requested
