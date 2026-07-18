@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gen Alpha Slang Check — Are You Cooked?</title>
+<style>
+  :root{
+    --bg:#0d0b1e; --card:#171233; --card2:#1f1840;
+    --pink:#ff2e88; --lime:#b6ff2e; --cyan:#2ee6ff; --purple:#8b5cf6; --yellow:#ffd52e;
+    --text:#f4f1ff; --dim:#a99fd6;
+    --red:#ff4d5e; --green:#3ddc84;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    overflow-x:hidden; padding:24px 16px;
+    position:relative;
+  }
+  /* gradient blobs */
+  body::before, body::after{
+    content:""; position:fixed; border-radius:50%; filter:blur(90px); opacity:.35; z-index:0; pointer-events:none;
+  }
+  body::before{width:420px;height:420px;background:var(--pink);top:-120px;left:-120px;}
+  body::after{width:420px;height:420px;background:var(--purple);bottom:-140px;right:-120px;}
+  .blob3{position:fixed;width:300px;height:300px;border-radius:50%;background:var(--cyan);filter:blur(90px);opacity:.22;top:55%;left:-100px;z-index:0;pointer-events:none;}
+
+  .app{position:relative;z-index:1;width:100%;max-width:640px;}
+  .screen{display:none;animation:popin .35s cubic-bezier(.2,1.4,.4,1);}
+  .screen.active{display:block;}
+  @keyframes popin{from{transform:scale(.92) translateY(14px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+  @keyframes wiggle{0%,100%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}}
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-10px) rotate(3deg);}}
+
+  .card{
+    background:var(--card); border:3px solid #2c2358; border-radius:24px;
+    padding:32px 28px; box-shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+
+  /* START SCREEN */
+  .kicker{
+    display:inline-block; background:var(--lime); color:#101010; font-weight:800;
+    font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+    padding:6px 14px; border-radius:999px; transform:rotate(-2deg); margin-bottom:18px;
+  }
+  h1.title{
+    font-size:clamp(2.1rem,7vw,3.2rem); line-height:1.02; font-weight:900; letter-spacing:-.02em;
+    text-transform:uppercase; margin-bottom:14px;
+  }
+  h1.title .grad{
+    background:linear-gradient(92deg,var(--pink),var(--yellow) 55%,var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .sub{color:var(--dim); font-size:1.02rem; line-height:1.55; margin-bottom:26px;}
+  .sub b{color:var(--text);}
+  .bigbtn{
+    width:100%; border:none; cursor:pointer; font-family:inherit;
+    background:linear-gradient(92deg,var(--pink),var(--purple));
+    color:#fff; font-size:1.25rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em;
+    padding:18px 20px; border-radius:18px;
+    box-shadow:0 8px 0 #a11d5c, 0 16px 34px rgba(255,46,136,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .bigbtn:hover{transform:translateY(-2px);}
+  .bigbtn:active{transform:translateY(4px); box-shadow:0 3px 0 #a11d5c;}
+  .floaters{font-size:1.7rem; margin-top:22px; display:flex; gap:18px; justify-content:center;}
+  .floaters span{display:inline-block; animation:floaty 3s ease-in-out infinite;}
+  .floaters span:nth-child(2){animation-delay:.4s;}
+  .floaters span:nth-child(3){animation-delay:.8s;}
+  .floaters span:nth-child(4){animation-delay:1.2s;}
+  .floaters span:nth-child(5){animation-delay:1.6s;}
+
+  /* QUIZ SCREEN */
+  .hud{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:12px;}
+  .hud .qcount{font-weight:800; color:var(--dim); font-size:.95rem; letter-spacing:.05em;}
+  .hud .score{
+    background:var(--card2); border:2px solid #2c2358; padding:6px 14px; border-radius:999px;
+    font-weight:900; font-size:.95rem; color:var(--yellow);
+  }
+  .hud .streak{font-weight:900; font-size:.95rem; color:var(--pink);}
+  .bar{height:10px; background:var(--card2); border-radius:999px; overflow:hidden; margin-bottom:22px; border:2px solid #2c2358;}
+  .bar i{display:block; height:100%; width:0%; border-radius:999px;
+    background:linear-gradient(90deg,var(--pink),var(--yellow),var(--lime));
+    transition:width .4s cubic-bezier(.2,1,.3,1);}
+  .prompt-label{color:var(--dim); font-weight:700; text-transform:uppercase; font-size:.78rem; letter-spacing:.14em; margin-bottom:10px;}
+  .phrase{
+    font-size:clamp(1.5rem,5vw,2.1rem); font-weight:900; line-height:1.15; letter-spacing:-.01em;
+    margin-bottom:24px;
+    background:linear-gradient(92deg,var(--cyan),var(--lime));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .opts{display:grid; gap:12px;}
+  .opt{
+    text-align:left; font-family:inherit; cursor:pointer;
+    background:var(--card2); color:var(--text);
+    border:3px solid #342a63; border-radius:16px;
+    padding:15px 18px; font-size:1.02rem; font-weight:600; line-height:1.4;
+    transition:transform .1s ease, border-color .15s ease, background .15s ease;
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .opt .tag{
+    flex:0 0 auto; width:28px; height:28px; border-radius:9px; display:grid; place-items:center;
+    background:#3b2f73; font-weight:900; font-size:.85rem; color:var(--cyan); margin-top:1px;
+  }
+  .opt:hover:not(:disabled){transform:translateY(-2px); border-color:var(--purple);}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:rgba(61,220,132,.14); border-color:var(--green);}
+  .opt.correct .tag{background:var(--green); color:#08240f;}
+  .opt.wrong{background:rgba(255,77,94,.14); border-color:var(--red); animation:shake .4s ease;}
+  .opt.wrong .tag{background:var(--red); color:#fff;}
+  .opt.faded{opacity:.45;}
+
+  .verdict{margin-top:20px; display:none;}
+  .verdict.show{display:block; animation:popin .3s cubic-bezier(.2,1.4,.4,1);}
+  .verdict .vbadge{
+    display:inline-block; font-weight:900; text-transform:uppercase; letter-spacing:.06em;
+    padding:7px 16px; border-radius:999px; font-size:.95rem; margin-bottom:12px; transform:rotate(-1.5deg);
+  }
+  .verdict.good .vbadge{background:var(--lime); color:#101c05;}
+  .verdict.bad .vbadge{background:var(--red); color:#fff;}
+  .verdict .why{
+    background:var(--card2); border:2px dashed #453a85; border-radius:14px;
+    padding:14px 16px; color:var(--dim); font-size:.98rem; line-height:1.55;
+  }
+  .verdict .why b{color:var(--text);}
+  .nextbtn{
+    margin-top:16px; width:100%; border:none; cursor:pointer; font-family:inherit;
+    background:linear-gradient(92deg,var(--cyan),var(--purple));
+    color:#fff; font-size:1.05rem; font-weight:900; text-transform:uppercase; letter-spacing:.05em;
+    padding:14px; border-radius:14px;
+    box-shadow:0 6px 0 #1b8ba0;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .nextbtn:active{transform:translateY(4px); box-shadow:0 2px 0 #1b8ba0;}
+
+  /* RESULTS */
+  .result-emoji{font-size:4rem; margin-bottom:10px; display:inline-block; animation:wiggle 1.6s ease-in-out infinite;}
+  .result-title{
+    font-size:clamp(1.9rem,6.5vw,2.8rem); font-weight:900; text-transform:uppercase; letter-spacing:-.01em; line-height:1.05;
+    margin-bottom:8px;
+    background:linear-gradient(92deg,var(--yellow),var(--pink));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .result-sub{color:var(--dim); font-size:1.05rem; margin-bottom:22px; line-height:1.5;}
+  .result-score{
+    font-size:1.3rem; font-weight:900; background:var(--card2); border:2px solid #2c2358;
+    display:inline-block; padding:10px 22px; border-radius:999px; margin-bottom:26px; color:var(--cyan);
+  }
+  .confetti{position:fixed; top:-40px; z-index:5; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);}}
+
+  footer{margin-top:18px; text-align:center; color:#5d548a; font-size:.8rem;}
+
+  /* LOGIN */
+  .gbtn{
+    width:100%; border:none; cursor:pointer; font-family:inherit;
+    background:#fff; color:#1a1a2e; font-size:1.08rem; font-weight:800;
+    padding:15px 20px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    box-shadow:0 6px 0 #b9b9cf, 0 14px 30px rgba(255,255,255,.12);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .gbtn:hover{transform:translateY(-2px);}
+  .gbtn:active{transform:translateY(4px); box-shadow:0 2px 0 #b9b9cf;}
+  .gbtn svg{width:22px;height:22px;flex:0 0 auto;}
+  .gbtn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+  .setupnote{
+    display:none; margin-top:16px; text-align:left;
+    background:rgba(255,213,46,.08); border:2px dashed #8a7a2a; border-radius:14px;
+    padding:13px 15px; color:#e8d98a; font-size:.9rem; line-height:1.55;
+  }
+  .setupnote.show{display:block;}
+  .setupnote code{background:#2a2450; padding:1px 6px; border-radius:6px; color:var(--cyan); font-size:.85em;}
+  .loginerr{display:none; margin-top:14px; color:var(--red); font-weight:700; font-size:.92rem;}
+  .loginerr.show{display:block;}
+
+  /* USER CHIP */
+  .userbar{display:none; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px;}
+  .userbar.show{display:flex;}
+  .userchip{
+    display:flex; align-items:center; gap:10px;
+    background:var(--card2); border:2px solid #2c2358; border-radius:999px; padding:5px 14px 5px 5px;
+    font-weight:700; font-size:.9rem; color:var(--dim); min-width:0;
+  }
+  .userchip img{width:30px;height:30px;border-radius:50%;background:#3b2f73;}
+  .userchip .uname{color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px;}
+  .signout{
+    border:2px solid #2c2358; background:transparent; color:var(--dim); cursor:pointer; font-family:inherit;
+    font-weight:800; font-size:.82rem; padding:8px 14px; border-radius:999px;
+    transition:color .15s, border-color .15s;
+  }
+  .signout:hover{color:var(--red); border-color:var(--red);}
+
+  .savestatus{margin:-10px 0 20px; font-weight:700; font-size:.92rem; color:var(--dim);}
+  .savestatus.ok{color:var(--green);}
+  .savestatus.err{color:var(--red);}
+</style>
+</head>
+<body>
+<div class="blob3"></div>
+<div class="app">
+
+  <div class="userbar" id="userbar">
+    <span class="userchip"><img id="uavatar" alt="" referrerpolicy="no-referrer"><span class="uname" id="uname"></span></span>
+    <button class="signout" onclick="doSignOut()">Sign out</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="screen active" id="scr-login">
+    <div class="card" style="text-align:center;">
+      <span class="kicker">members only · no lurkers</span>
+      <h1 class="title">Gen Alpha<br><span class="grad">Slang Check</span></h1>
+      <p class="sub">Sign in with Google to take the quiz.<br>Your scores get saved to the leader-board database. 📊</p>
+      <button class="gbtn" id="gbtn" onclick="doSignIn()">
+        <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Sign in with Google
+      </button>
+      <div class="loginerr" id="loginerr"></div>
+      <div class="setupnote" id="setupnote">
+        <b>⚠️ Setup needed:</b> this app isn't connected to Firebase yet.
+        Open <code>SETUP.md</code>, create your free Firebase project, and paste your config into the
+        <code>FIREBASE_CONFIG</code> block near the bottom of this HTML file. Sign-in is disabled until then.
+      </div>
+    </div>
+    <footer>Google sign-in required · results stored in Firestore</footer>
+  </div>
+
+  <!-- START -->
+  <div class="screen" id="scr-start">
+    <div class="card" style="text-align:center;">
+      <span class="kicker">no cap · certified benchmark</span>
+      <h1 class="title">Gen Alpha<br><span class="grad">Slang Check</span></h1>
+      <p class="sub">10 random phrases. 4 meanings each — <b>all of them sound plausible</b>.<br>
+      Pick what it actually means. Find out if you're a <b>certified rizzler</b>… or a <b>certified NPC</b>. 💀</p>
+      <button class="bigbtn" onclick="startRound()">Lock in 🔒</button>
+      <div class="floaters"><span>🐐</span><span>💀</span><span>🔥</span><span>🚽</span><span>✨</span></div>
+    </div>
+    <footer>Built from a Gen Alpha slang benchmark · brainrot certified</footer>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="scr-quiz">
+    <div class="hud">
+      <span class="qcount" id="qcount">1 / 10</span>
+      <span class="streak" id="streak"></span>
+      <span class="score" id="score">0 pts</span>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="card">
+      <div class="prompt-label">What does it mean when someone says…</div>
+      <div class="phrase" id="phrase">“…”</div>
+      <div class="opts" id="opts"></div>
+      <div class="verdict" id="verdict">
+        <span class="vbadge" id="vbadge"></span>
+        <div class="why" id="why"></div>
+        <button class="nextbtn" id="nextbtn" onclick="nextQ()">Next ➜</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="scr-end">
+    <div class="card" style="text-align:center;">
+      <span class="result-emoji" id="remoji">🐐</span>
+      <div class="result-title" id="rtitle">SKIBIDI GOAT</div>
+      <p class="result-sub" id="rsub"></p>
+      <div class="result-score" id="rscore">10 / 10</div>
+      <div class="savestatus" id="savestatus"></div>
+      <button class="bigbtn" onclick="startRound()">Run it back 🔁</button>
+    </div>
+    <footer>New round = 10 fresh phrases from the pool</footer>
+  </div>
+
+</div>
+<script>
+// Gen Alpha slang quiz pool — curated from Gen_Alpha_Benchmark_v7_4
+// Each entry: q (the phrase), opts (4 plausible meanings), a (index of correct), why (explanation)
+const QUESTIONS = [
+  {q:"That's so skibidi", opts:["All-purpose nonsense word — can mean cool, weird, or nothing at all","Something is moving way too fast","Something smells absolutely terrible","Something is old-school and outdated"], a:0, why:"From the Skibidi Toilet YouTube series. It has no fixed meaning — tone decides everything. Cambridge Dictionary added it in 2025."},
+  {q:"Only in Ohio", opts:["Something is bizarre, cursed, or inexplicably strange","Something is boring and painfully average","Something is wholesome and small-town sweet","Something is a suspiciously good deal"], a:0, why:"Ohio became the internet's designated 'cursed place' — anything unhinged gets tagged 'only in Ohio.'"},
+  {q:"You ate", opts:["You performed flawlessly — absolutely nailed it","You took way more than your share","You got completely defeated","You believed something fake"], a:0, why:"'You ate' (or 'ate and left no crumbs') means you did that perfectly. Food = excellence in Gen Alpha speak."},
+  {q:"This is bussin", opts:["Extremely good — especially food","Extremely crowded in here","Falling apart or broken","Loud and obnoxious"], a:0, why:"'Bussin' means delicious or excellent, usually about food. Roots in AAVE; peaked around 2021 but still understood."},
+  {q:"Fanum tax", opts:["Taking a portion of someone else's food","A fee for joining a friend group's chat","Money you owe after losing a bet","The cut a streamer takes from donations"], a:0, why:"Named after streamer Fanum, who famously takes bites of his friends' food. Stealing fries = collecting the Fanum tax."},
+  {q:"I'm in my flop era", opts:["Going through a phase of failure or decline","Taking a deliberate lazy-rest phase","A phase of dramatic overreactions","A phase of reinventing my whole style"], a:0, why:"An 'era' frames life as album cycles; a 'flop era' is when nothing is landing. Self-deprecating, usually playful."},
+  {q:"Bro is dripped out", opts:["Wearing an impressively stylish outfit","Completely exhausted, out of energy","Drenched from the rain","Unable to keep a secret"], a:0, why:"'Drip' = fashion. Dripped out means the outfit is elite."},
+  {q:"Iykyk", opts:["An inside reference — 'if you know, you know'","'I'm keeping your secret'","'Instantly known, universally recognized'","A warning that a spoiler is coming"], a:0, why:"If You Know, You Know — flags an in-group reference that outsiders won't get (and that's the point)."},
+  {q:"That was so out of pocket", opts:["Wildly inappropriate or unexpected","Paid for with personal money","Spontaneous and generous","Poorly planned and rushed"], a:0, why:"Means someone said or did something outrageous / out of line. Nothing to do with expenses."},
+  {q:"You are serving", opts:["Looking or presenting yourself excellently","Doing everyone's work for them","Being a pushover people-pleaser","Dishing out brutal insults"], a:0, why:"From ballroom/drag culture — 'serving' (a look) means you're delivering excellence, usually about style or presence."},
+  {q:"You've got that unspoken rizz", opts:["Effortless charisma without even trying to talk","A secret crush nobody knows about","Charm that only works over text","A mysterious, intimidating silence"], a:0, why:"'Rizz' = charisma. Unspoken rizz is attracting people without saying a word — the highest tier of rizz."},
+  {q:"Somebody's acting salty", opts:["Bitter, upset, or resentful","Sweaty and nervous","Extra sassy and fabulous","Desperate for attention"], a:0, why:"Salty = bitter about a loss or slight. One of the older terms that survived multiple generations of slang."},
+  {q:"Bro secured the bag", opts:["Got the money / achieved the goal","Packed up and ready to leave","Made an amazing catch","Hid the evidence in time"], a:0, why:"The 'bag' is money or success. Securing it means you got what you came for."},
+  {q:"Y'all are sleeping on this", opts:["Ignoring or underrating something genuinely good","Procrastinating on something important","So boring it puts everyone to sleep","Overhyping something mediocre"], a:0, why:"'Sleeping on' something means failing to give it the attention it deserves."},
+  {q:"You look absolutely snatched", opts:["Looking extremely good, especially outfit or figure","Looking exhausted, like you haven't slept","Looking like your outfit was stolen","Looking dangerously thin"], a:0, why:"'Snatched' = flawless appearance. Also from ballroom/drag culture, like 'serving.'"},
+  {q:"Bro is tweaking", opts:["Acting irrationally or saying something bizarre","Fine-tuning and perfecting his setup","Working out way too hard","Jittery from too much caffeine"], a:0, why:"'Tweaking' means acting unhinged or talking nonsense — 'you're tweaking' ≈ 'you've lost it.'"},
+  {q:"Bro understood the assignment", opts:["Executed perfectly; did exactly what the moment called for","Did the bare minimum required","Finally figured out what's going on","Followed orders without question"], a:0, why:"Means someone showed up and delivered flawlessly — dressed right, played right, got it."},
+  {q:"Give me your lore", opts:["Tell me your backstory","Share your passwords and secrets","Teach me your techniques","Give me gossip about your friends"], a:0, why:"'Lore' (from game/fandom worldbuilding) = someone's personal history. Asking for lore = asking for the origin story."},
+  {q:"This is mid", opts:["Mediocre and unremarkable","About halfway finished","Perfectly balanced","Central to the whole story"], a:0, why:"'Mid' = middle of the road. A dismissive shrug in one word."},
+  {q:"You're an oomf", opts:["One of my followers/mutuals — internet-friend shorthand","An embarrassing person to be seen with","Someone with strong impact ('oomph')","An old friend from childhood"], a:0, why:"Acronym: One Of My Followers/Friends. Used to vaguely reference someone in your online circle."},
+  {q:"That's OP", opts:["Overpowered — unfairly strong or good","Someone else's opinion","Out of place","An overreaction"], a:0, why:"From gaming: OverPowered. So strong it feels unfair — often a compliment."},
+  {q:"This is nerfed", opts:["Weakened or made less effective","Made of foam and harmless","Brand new and improved","Copied from something else"], a:0, why:"From gaming patches (and NERF toys): when something gets deliberately weakened, it's been nerfed."},
+  {q:"You're a moot", opts:["A mutual — we follow each other","Irrelevant — your opinion doesn't count","Someone I've muted","A silent member of the group chat"], a:0, why:"Short for 'mutual.' Nothing to do with 'moot point' — a moot is an internet friend who follows you back."},
+  {q:"Bro clutched up", opts:["Performed brilliantly under pressure at the crucial moment","Panicked and froze completely","Got clingy and held on too tight","Grabbed the last available spot"], a:0, why:"From gaming: 'clutch' = winning when it matters most, against the odds."},
+  {q:"Bro is locked in", opts:["Extremely focused and committed","Trapped in a commitment he can't escape","Grounded by his parents","In a serious exclusive relationship"], a:0, why:"'Locked in' = full tunnel-vision focus mode. Say it before finals week."},
+  {q:"Bro is pulling", opts:["Successfully attracting romantic interest","Lifting heavy at the gym","Getting lucky drops in a game","Leaving the party early"], a:0, why:"'Pulling' = getting romantic attention. High pull rate = high rizz."},
+  {q:"Ts pmo", opts:["'This pisses me off'","'That's so put-me-on' — share it with me","'Totally sick, prime material online'","'This makes perfect sense'"], a:0, why:"ts = this, pmo = pisses me off. A staple of 2025-era abbreviation-maxxing."},
+  {q:"Ts is not tuff", opts:["This is not impressive","This is not difficult","This is not durable","This is not fair"], a:0, why:"'Tuff' = cool/impressive. 'Not tuff' is the polite-ish way to say something flopped."},
+  {q:"Low taper fade", opts:["A haircut that became an absurdist mega-meme","A sneaky exit from a party","Slowly ghosting someone over weeks","A subtle, deniable insult"], a:0, why:"From ericdoa's 2024 stream-of-consciousness song ('you know what's still massive? the low taper fade') — a haircut turned inescapable meme."},
+  {q:"Clanker", opts:["A derogatory meme term for robots and AI","A clumsy person who drops everything","An old beat-up car","Someone wearing loud jewelry"], a:0, why:"Revived from Star Wars: The Clone Wars — the internet's favorite anti-robot 'slur' as AI took over feeds."},
+  {q:"Bro left no crumbs", opts:["Executed flawlessly — nothing left to criticize","Ate everything in the fridge","Vanished without a trace","Cleaned the whole place spotless"], a:0, why:"Extension of 'you ate': ate so completely there's nothing left. Total victory."},
+  {q:"Bro is soft launching", opts:["Subtly hinting at a new relationship without announcing it","Quietly starting a small business","Gently breaking bad news","Testing a new look before committing"], a:0, why:"Posting a hand, a shadow, two coffee cups... revealing a partner in cryptic installments before the 'hard launch.'"},
+  {q:"This is a canon event", opts:["A formative moment that has to happen — don't interfere","A huge explosive drama","An official fan convention","A perfectly photo-worthy moment"], a:0, why:"From Spider-Verse: painful-but-necessary moments that shape who you become. 'I can't interfere, it's canon.'"},
+  {q:"Ts is sending me", opts:["This is making me laugh uncontrollably","This is making me leave","This is giving me chills","This is making me furious"], a:0, why:"'Sending me' = launching me into orbit with laughter."},
+  {q:"Valid crashout", opts:["A meltdown that was completely justified","A well-deserved nap","An acceptable excuse to leave early","A car accident that wasn't your fault"], a:0, why:"A 'crashout' is losing your cool; calling it 'valid' means honestly, fair enough."},
+  {q:"Bro is on a side quest", opts:["Doing something completely random and off-task","Secretly seeing someone else","Working a second job","Avoiding his responsibilities"], a:0, why:"Gaming term: wandered off the main storyline. Left the group at the mall and came back with a lizard? Side quest."},
+  {q:"Plot armor is carrying him", opts:["He keeps escaping consequences like the script protects him","He's dressing way too formally","His interesting backstory makes him popular","Powerful friends keep bailing him out"], a:0, why:"Plot armor = the invisible protection main characters have. Absurdly lucky people 'have plot armor.'"},
+  {q:"Bro is doomposting again", opts:["Posting a stream of hopeless, pessimistic content","Spoiling movie endings for everyone","Posting cursed images at 3am","Predicting his team will lose"], a:0, why:"Doomposting = flooding the feed with despair. Related: doomscrolling, its consumption-side twin."},
+  {q:"I'm dead bro stop", opts:["That's so funny I can't breathe","I'm completely exhausted","I'm in serious trouble","I'm done with this friendship"], a:0, why:"'Dead' = killed by laughter. Also appears as 💀, which replaced 😂 for an entire generation."},
+  {q:"Bro is just larping at this point", opts:["Pretending to be something he's not","Lagging behind everyone else","Lurking silently in the group chat","Lying to protect a friend"], a:0, why:"From LARP (live-action role-play). Accusing someone of larping = their whole persona is an act."},
+  {q:"Bro is dog water at this game", opts:["He's absolutely terrible at it","He's loyal and reliable, like a dog","He plays dirty and unfair","He makes it look too easy"], a:0, why:"Popularized by a Fortnite YouTuber — 'dog water' = hot garbage tier. Pure insult, usually banter."},
+  {q:"Why you so pressed about it", opts:["Why are you so bothered/upset about it","Why are you in such a hurry","Why are you so stressed about deadlines","Why are you dressed so formally"], a:0, why:"'Pressed' = visibly bothered, letting something get under your skin."},
+  {q:"Chicken jockey", opts:["A random exclamation from the Minecraft movie","Someone who chickens out at the last second","A backseat gamer telling you what to do","Someone riding a famous friend's coattails"], a:0, why:"A baby zombie riding a chicken — rare Minecraft mob. The 2025 movie line made theaters erupt; kids yell it for no reason."},
+  {q:"That's cap", opts:["That's a lie","That's the absolute limit","That's impressive — hats off","That's way overpriced"], a:0, why:"Cap = lie; 'no cap' = no lie, for real. From AAVE."},
+  {q:"Bro is glazing", opts:["Praising someone excessively — sucking up","Zoning out with glassy eyes","Sugarcoating bad news","Showing off something shiny and new"], a:0, why:"Glazing = pouring syrupy, over-the-top praise on someone. Often used to mock fans: 'stop glazing.'"},
+  {q:"Bro got caught in 4K", opts:["Caught red-handed with undeniable evidence","Photographed at his absolute best","Featured on the stadium big screen","Spotted in public unexpectedly"], a:0, why:"4K = ultra-high-definition. The receipts are so clear there's no denying it. Often fuels pile-ons — use with care."},
+  {q:"Bro got cooked", opts:["Got roasted or defeated, publicly humiliated","Worn out from working too hard","Badly sunburned","Caught cheating on a test"], a:0, why:"Cooked = done for. Can celebrate a takedown — the mean cousin of 'let him cook.'"},
+  {q:"You're so delulu", opts:["Delusional — believing what you want to believe","Adorably quirky and random","Easily distracted","Obsessed with celebrity gossip"], a:0, why:"Cutesy 'delusional,' born in K-pop stan culture. 'Delulu is the solulu' = manifest anyway. Can also dismiss real concerns."},
+  {q:"You're giving me the ick", opts:["A small behavior just killed my attraction instantly","You're making me physically ill","You're creeping me out — I feel unsafe","You're annoying me on purpose"], a:0, why:"The ick: a sudden, irreversible turn-off from something minor (chasing a ping-pong ball, running for the bus)."},
+  {q:"You're such an iPad kid", opts:["A screen-addicted child who can't function without a tablet","A spoiled kid with the latest gadgets","A tech-genius child prodigy","A kid who's always on FaceTime"], a:0, why:"The generation raised on tablets at restaurants. Implies poor social skills and a sticky screen. Affectionate-ish insult."},
+  {q:"You're such an NPC", opts:["Generic and scripted — no original thoughts","A hopeless gaming addict","Someone who avoids all conflict","Someone who never goes outside"], a:0, why:"Non-Player Character: background extra energy. Dehumanizing when aimed at real people — that's exactly why kids deploy it."},
+  {q:"You're such a simp", opts:["Doing way too much for someone who barely notices you","A simple-minded person","Someone too shy to flirt","A genuinely generous friend"], a:0, why:"Simp = excessive devotion, usually romantic. Mocks (mostly) guys for being 'down bad.'"},
+  {q:"Go touch some grass", opts:["You're too online — reconnect with reality","Calm down and try meditating","Go do your yard work","Go get some exercise"], a:0, why:"The prescription for being chronically online. Dismissive but often deserved."},
+  {q:"You are not him", opts:["You lack the status/skill you think you have","You've completely changed","I don't even recognize you anymore","You're not the person I was looking for"], a:0, why:"'Him' = the guy, the one who's elite. 'You are not him' = stop acting like you're built different. Ego destruction in four words."},
+  {q:"Womp womp", opts:["Sarcastic fake sympathy — 'too bad, who cares'","The sound of genuine crying","An awkward silence","Cheering up a friend after a fail"], a:0, why:"The sad-trombone sound as text. Dismisses someone's complaint as unworthy of real sympathy."},
+  {q:"Bro is an unc", opts:["Acting old and out of touch — uncle status","Uncool and trying too hard","Unbothered by everything","Someone's actual uncle"], a:0, why:"'Unc' = uncle: affectionate-ish ageism for anyone over ~25 who kneels down slowly or references 2016 memes."},
+  {q:"Bro is aura farming", opts:["Doing things purely to look cool and mysterious","Meditating to cleanse his energy","Grinding for rare items in a game","Growing his following with good vibes"], a:0, why:"Aura = coolness points. Aura farming = manufacturing mysterious-cool moments for clout. Calling it out = accusing someone of being performative."},
+  {q:"Ts is so washed", opts:["Past its prime — no longer good","Squeaky clean and pure","Overexposed and overused","Faded like old denim"], a:0, why:"Washed (washed-up) = declining, finished. Applied to athletes, games, trends, and 26-year-olds."},
+  {q:"Bro got ratioed", opts:["His post got beaten by a reply with more likes","He got outnumbered in an argument","He got reported and banned","He got the math badly wrong"], a:0, why:"When a reply out-likes the original post, the internet has voted: you lose. A public scoreboard for humiliation."},
+  {q:"Skill issue", opts:["Dismissive way to say 'that's your fault for being bad'","A genuine coaching tip","A bug in the game","A hardware problem"], a:0, why:"Gaming-born: any complaint can be answered with 'skill issue.' Zero sympathy, maximum smugness — that's the point."},
+  {q:"That's sus", opts:["Suspicious — something's off","Sustainable and eco-friendly","Surprisingly impressive","Disgusting"], a:0, why:"Suspect/suspicious, supercharged by Among Us. Mostly innocent, but can carry accusatory weight aimed at people."},
+  {q:"Let him cook", opts:["Don't interrupt — he might be onto something","Make him do the chores for once","He's in big trouble now","Leave him alone, he's angry"], a:0, why:"Let him keep going, greatness may be loading. Beware the sarcastic flip: 'who let him cook?' means it went terribly."},
+  {q:"GGs", opts:["'Good games' — sportsmanlike respect (or sarcastic 'it's over for you')","'Gotta go' — leaving now","'Good grief'","'Giggles'"], a:0, why:"Post-match etiquette from gaming. Sincere between rivals; sarcastic 'GGs' before the match even ends = trash talk."},
+  {q:"Bro is cracked", opts:["Insanely skilled at the game","Mentally falling apart","Completely broke — no money","Addicted to his phone"], a:0, why:"In gaming, cracked = absurdly good. Context matters: elsewhere it can mean unstable — same word, different platform."},
+  {q:"Bro got caught lacking", opts:["Caught off-guard in an embarrassing moment","Caught slacking off at work","Caught without a birthday gift","Caught skipping class"], a:0, why:"Caught unprepared — wrong outfit, guard down, no comeback ready. In peer groups it's teasing; in street contexts it's far more serious."},
+  {q:"Bro is not slick", opts:["He thinks he's sneaky but everyone can see it","He's clumsy and drops everything","He's just not cool","He's brutally honest"], a:0, why:"Said when someone's 'subtle' move — a like on an ex's photo, a quiet food grab — was fully visible to everyone."},
+  {q:"Erm what the sigma", opts:["Absurdist meme reaction to something weird","A math class inside joke","A formal way of asking what's wrong","Calling someone a huge nerd"], a:0, why:"Peak brainrot: mashes nerd-voice 'erm' with 'sigma male' memes into pure nonsense confusion. Mostly said ironically. Mostly."},
+  {q:"Gyatt", opts:["Exclamation reacting to someone's curvy figure","Another way of saying GOAT — the greatest","A yelp of fear or shock","A way to tell someone to get out"], a:0, why:"Compressed 'god damn,' popularized by streamers reacting to curves. Objectifying by design — one of the defining (and most parent-alarming) Gen Alpha words."},
+  {q:"Ts is chopped", opts:["Busted, ugly, or low quality","Cut into neat pieces","Well-edited, like a good remix","Canceled halfway through"], a:0, why:"Chopped = cooked's cousin: something (or someone's fit, haircut, setup) is just bad."},
+  {q:"Bro carried the lobby", opts:["Single-handedly won it for everyone else","Was dead weight the whole match","Took the joke way too far","Got escorted out by security"], a:0, why:"Carrying = doing all the work while teammates ride along. High praise for you, shade for the carried."},
+  {q:"Ts is algorithm fodder", opts:["Content made purely to farm engagement, not to be good","Content the algorithm unfairly buried","Educational content about tech","Random filler between good posts"], a:0, why:"Slop built to game the feed. Gen Alpha is fluent in spotting engagement bait — and names it out loud."},
+  {q:"Bro is soft blocking", opts:["Blocking then instantly unblocking to force an unfollow","Muting someone without them knowing","Leaving someone on read forever","Slowly replying less until they go away"], a:0, why:"The stealth eject: block + unblock removes a follower without notification. Social-media-native etiquette warfare."},
+  {q:"Body is tea", opts:["Their body is gorgeous — 'tea' as in stunning","They're spilling gossip about someone's body","They're weak and fragile like a teabag","They drink too much boba"], a:0, why:"'Tea' evolved from gossip (drag culture) into an adjective meaning attractive/excellent. Language speedrun in real time."},
+  {q:"Timeline is cooked", opts:["My feed is broken/unhinged — the algorithm has lost it","I'm running out of time on a deadline","History is repeating itself","My schedule is completely full"], a:0, why:"Commented under bizarre posts: 'the timeline (feed) is cooked' = what is the algorithm feeding me today."},
+  {q:"Slay", opts:["You did that exceptionally well","You destroyed someone in an argument","You're being way too dramatic","You look dangerously intimidating"], a:0, why:"From drag/ballroom culture: to slay = to absolutely excel. All-purpose hype word."},
+  {q:"You have aura", opts:["You have impressive presence and effortless charisma","You seem mystical and spiritual","You're glowing with good health","You give off a suspicious vibe"], a:0, why:"Aura = social gravity, measured in imaginary points. Doing something cool = +1000 aura. Tripping in public = -5000."},
+  {q:"This is such a banger", opts:["This is excellent — especially a song","This is painfully loud","This is a total flop","This is a rip-off of something better"], a:0, why:"A banger is a track (or post, or meal) that goes hard. Purely positive."},
+  {q:"This just hits different", opts:["This has a uniquely powerful effect","This is disappointing compared to before","This came out of nowhere","This feels strangely wrong"], a:0, why:"Something ordinary landing extraordinarily — late-night food, a song at the exact right moment."},
+  {q:"You are the GOAT", opts:["You're the Greatest Of All Time","You're stubborn and impossible to argue with","You're the scapegoat taking the blame","You're getting old"], a:0, why:"GOAT = Greatest Of All Time. The 🐐 emoji alone can deliver the compliment."},
+  {q:"I'm having my glow up", opts:["I'm transforming for the better — looks, confidence, everything","I'm getting my skincare routine together","I'm having my moment in the spotlight","I'm pulling an all-nighter"], a:0, why:"A glow up is a dramatic positive transformation, usually between awkward-phase and now."},
+  {q:"He delivered", opts:["He came through — met or exceeded expectations","He brought the food over","He finally confessed the truth","He passed the responsibility to someone else"], a:0, why:"Short for 'delivered the goods.' The moment called for greatness and he provided."},
+  {q:"This slaps", opts:["This is excellent — especially music","This is genuinely offensive","This hits too hard emotionally","This is catchy but mediocre"], a:0, why:"If a song slaps, turn it up. Sibling of 'banger.'"},
+  {q:"Fit check", opts:["Showing off today's outfit for evaluation","A quick gym progress check","Seeing whether everything fits in the bag","Making sure you're healthy enough to play"], a:0, why:"'Fit' = outfit. A fit check is presenting your look to the group (or camera) for scoring."},
+  {q:"Pop off", opts:["Go off — perform or speak your mind at full power","Storm off angrily","Quiet down before things escalate","Fail in spectacular fashion"], a:0, why:"An encouragement: 'pop off then!!' = do the thing, loudly and excellently."},
+  {q:"Clock that tea", opts:["Notice and acknowledge that truth/gossip","Time for a tea break","Stop spreading gossip right now","Hurry up and get to the point"], a:0, why:"'Clock' = notice/register, 'tea' = truth. Drag-culture lineage: yes, we all saw it, it's real."},
+  {q:"He passed the vibe check", opts:["His energy is good — he's approved","He survived an awkward interrogation","He aced a personality quiz","He managed to avoid suspicion"], a:0, why:"An informal social scan: good energy = pass. No appeal process for failing."},
+  {q:"You are my pookie", opts:["A term of endearment — you're my cutie","You're my loyal sidekick","You're my sworn rival","You're annoying but I tolerate you"], a:0, why:"Peak affection, revived by a viral couple's outfit videos. Saying it non-ironically = genuine love."}
+];
+
+
+const ROUND_SIZE = 10;
+let round = [], idx = 0, score = 0, streak = 0, answered = false;
+let currentUser = null, roundAnswers = [], roundStartedAt = null;
+
+const $ = id => document.getElementById(id);
+
+/* ---------- auth plumbing (Firebase module below calls these) ---------- */
+function onUserChanged(user){
+  currentUser = user;
+  if(user){
+    $('uavatar').src = user.photoURL || '';
+    $('uname').textContent = user.displayName || user.email || 'Signed in';
+    $('userbar').classList.add('show');
+    // only move off the login screen; never yank the user out of a running quiz
+    if($('scr-login').classList.contains('active')) show('scr-start');
+  }else{
+    $('userbar').classList.remove('show');
+    show('scr-login');
+  }
+}
+function doSignIn(){
+  $('loginerr').classList.remove('show');
+  if(!window.firebaseAPI){ return; }
+  window.firebaseAPI.signIn().catch(err => {
+    const el = $('loginerr');
+    el.textContent = 'Sign-in failed: ' + (err && err.code ? err.code : err);
+    el.classList.add('show');
+  });
+}
+function doSignOut(){
+  if(window.firebaseAPI) window.firebaseAPI.signOut();
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function startRound(){
+  if(!currentUser){ show('scr-login'); return; }
+  round = shuffle(QUESTIONS).slice(0, ROUND_SIZE);
+  idx = 0; score = 0; streak = 0;
+  roundAnswers = []; roundStartedAt = new Date();
+  document.querySelectorAll('.confetti').forEach(c=>c.remove());
+  show('scr-quiz');
+  renderQ();
+}
+
+function renderQ(){
+  answered = false;
+  const item = round[idx];
+  $('qcount').textContent = (idx+1) + ' / ' + ROUND_SIZE;
+  $('score').textContent = score + ' pts';
+  $('streak').textContent = streak >= 2 ? '🔥 ' + streak + ' streak' : '';
+  $('bar').style.width = (idx / ROUND_SIZE * 100) + '%';
+  $('phrase').textContent = '“' + item.q + '”';
+  $('verdict').className = 'verdict';
+
+  // build shuffled options
+  const order = shuffle([0,1,2,3]);
+  const box = $('opts');
+  box.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  order.forEach((optIdx, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = '<span class="tag">' + letters[i] + '</span><span>' + item.opts[optIdx] + '</span>';
+    b.onclick = () => answer(b, optIdx === item.a, item.opts[optIdx]);
+    b.dataset.correct = (optIdx === item.a);
+    box.appendChild(b);
+  });
+}
+
+function answer(btn, isCorrect, pickedText){
+  if(answered) return;
+  answered = true;
+  roundAnswers.push({
+    phrase: round[idx].q,
+    picked: pickedText,
+    correctAnswer: round[idx].opts[round[idx].a],
+    correct: isCorrect
+  });
+  document.querySelectorAll('.opt').forEach(o=>{
+    o.disabled = true;
+    if(o.dataset.correct === 'true'){ o.classList.add('correct'); }
+    else if(o !== btn){ o.classList.add('faded'); }
+  });
+  const v = $('verdict');
+  if(isCorrect){
+    score++; streak++;
+    v.classList.add('good');
+    $('vbadge').textContent = pick(['W. No cap. 🐐','You ate that ✅','Certified. Slay. ✨','Sheeeesh 🔥','Valid fr fr 💯']);
+  }else{
+    streak = 0;
+    btn.classList.add('wrong');
+    v.classList.add('bad');
+    $('vbadge').textContent = pick(['Womp womp 💀','That’s cap ❌','Bro got cooked 🍳','NPC behavior detected 🤖','Skill issue 😬']);
+  }
+  $('score').textContent = score + ' pts';
+  $('streak').textContent = streak >= 2 ? '🔥 ' + streak + ' streak' : '';
+  $('why').innerHTML = '<b>“' + round[idx].q + '”</b> — ' + round[idx].why;
+  $('nextbtn').textContent = (idx === ROUND_SIZE-1) ? 'See my verdict 🏁' : 'Next ➜';
+  v.classList.add('show');
+  v.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+function nextQ(){
+  idx++;
+  if(idx >= ROUND_SIZE){ endRound(); } else { renderQ(); }
+}
+
+const TIERS = [
+  {min:10, e:'🐐', t:'SKIBIDI GOAT', s:'A perfect run. Your aura is immaculate, your knowledge is tuff, and honestly? We’re a little scared of you.'},
+  {min:9,  e:'😮‍💨', t:'CERTIFIED RIZZLER', s:'One slip, but you’ve clearly got the sauce. The group chat would accept you instantly.'},
+  {min:7,  e:'✨', t:'LOWKEY VALID', s:'You’re fluent-ish. A little more scrolling and you’ll be correcting people’s slang in the wild.'},
+  {min:5,  e:'😐', t:'MID. NO CAP.', s:'Not cooked, not cooking. You know just enough to be dangerous at a family dinner.'},
+  {min:3,  e:'💀', t:'BRO GOT COOKED', s:'The timeline has left you behind. It’s giving unc energy. Respectfully.'},
+  {min:0,  e:'🤖', t:'CERTIFIED NPC', s:'Zero rizz detected. Go touch some grass… then come back and run it again.'}
+];
+
+function endRound(){
+  const tier = TIERS.find(t => score >= t.min);
+  $('remoji').textContent = tier.e;
+  $('rtitle').textContent = tier.t;
+  $('rsub').textContent = tier.s;
+  $('rscore').textContent = score + ' / ' + ROUND_SIZE;
+  show('scr-end');
+  if(score >= 7) confetti();
+  saveResult(tier.t);
+}
+
+function saveResult(tierTitle){
+  const el = $('savestatus');
+  if(!window.firebaseAPI || !currentUser){
+    el.textContent = ''; return;
+  }
+  el.className = 'savestatus';
+  el.textContent = 'Saving result… ⏳';
+  window.firebaseAPI.saveResult({
+    uid: currentUser.uid,
+    name: currentUser.displayName || null,
+    email: currentUser.email || null,
+    score: score,
+    total: ROUND_SIZE,
+    tier: tierTitle,
+    startedAt: roundStartedAt ? roundStartedAt.toISOString() : null,
+    durationSeconds: roundStartedAt ? Math.round((Date.now() - roundStartedAt.getTime())/1000) : null,
+    answers: roundAnswers
+  }).then(() => {
+    el.className = 'savestatus ok';
+    el.textContent = 'Result saved to the database ✅';
+  }).catch(err => {
+    el.className = 'savestatus err';
+    el.textContent = 'Could not save result: ' + (err && err.code ? err.code : err);
+  });
+}
+
+function confetti(){
+  const emojis = ['🎉','🔥','✨','🐐','💯','🟩','🟪'];
+  for(let i=0;i<40;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.left = (Math.random()*100) + 'vw';
+    c.style.fontSize = (14 + Math.random()*20) + 'px';
+    c.style.animationDuration = (2.2 + Math.random()*2.5) + 's';
+    c.style.animationDelay = (Math.random()*0.8) + 's';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 6000);
+  }
+}
+</script>
+
+<!-- ======================================================================
+     FIREBASE — paste your own config here (see SETUP.md for the 5 steps)
+     ====================================================================== -->
+<script type="module">
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDSqoPC86Pl3bkbWZw4r4al-OCIm47gS3g",
+  authDomain:        "slang-check.firebaseapp.com",
+  projectId:         "slang-check",
+  appId:             "1:205156341290:web:2ee5179ea7d647df40d553"
+};
+
+const notConfigured = Object.values(FIREBASE_CONFIG).some(v => String(v).startsWith('PASTE'));
+
+if(notConfigured){
+  document.getElementById('setupnote').classList.add('show');
+  document.getElementById('gbtn').disabled = true;
+}else{
+  const [{ initializeApp }, authMod, fsMod] = await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+  ]);
+  const { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } = authMod;
+  const { getFirestore, collection, addDoc, serverTimestamp } = fsMod;
+
+  const app  = initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  window.firebaseAPI = {
+    signIn:  () => signInWithPopup(auth, provider),
+    signOut: () => signOut(auth),
+    saveResult: (data) => addDoc(collection(db, 'quiz_results'), { ...data, savedAt: serverTimestamp() })
+  };
+
+  onAuthStateChanged(auth, user => onUserChanged(user));
+}
+</script>
+</body>
+</html>
