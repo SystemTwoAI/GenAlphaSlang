@@ -177,6 +177,10 @@
   .setupnote code{background:#2a2450; padding:1px 6px; border-radius:6px; color:var(--cyan); font-size:.85em;}
   .loginerr{display:none; margin-top:14px; color:var(--red); font-weight:700; font-size:.92rem;}
   .loginerr.show{display:block;}
+  .disclaimer{
+    margin-top:18px; color:#7f76ab; font-size:.8rem; line-height:1.55; text-align:left;
+    border-top:1px solid #2c2358; padding-top:14px;
+  }
 
   /* USER CHIP */
   .userbar{display:none; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px;}
@@ -220,6 +224,7 @@
         Sign in with Google
       </button>
       <div class="loginerr" id="loginerr"></div>
+      <p class="disclaimer">⚠️ Heads up: this quiz features real Gen Alpha internet slang. Some expressions are teasing, irreverent, or carry negative connotations — they're included for cultural literacy and understanding, not endorsement.</p>
       <div class="setupnote" id="setupnote">
         <b>⚠️ Setup needed:</b> this app isn't connected to Firebase yet.
         Open <code>SETUP.md</code>, create your free Firebase project, and paste your config into the
