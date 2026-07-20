@@ -212,6 +212,45 @@
   .savestatus{margin:-10px 0 20px; font-weight:700; font-size:.92rem; color:var(--dim);}
   .savestatus.ok{color:var(--green);}
   .savestatus.err{color:var(--red);}
+
+  /* DEMOGRAPHIC CHIPS */
+  .chiplabel{
+    color:var(--dim); font-weight:800; text-transform:uppercase; font-size:.75rem;
+    letter-spacing:.13em; margin:20px 0 10px;
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+  .chip{
+    border:2px solid #342a63; background:var(--card2); color:var(--dim); cursor:pointer;
+    font-family:inherit; border-radius:999px; padding:9px 15px; font-weight:700; font-size:.86rem;
+    transition:all .12s ease;
+  }
+  .chip:hover{border-color:var(--purple); color:var(--text);}
+  .chip.sel{background:var(--purple); border-color:var(--purple); color:#fff; transform:scale(1.04);}
+  .bigbtn:disabled{opacity:.45; cursor:not-allowed; transform:none;}
+  .lockhint{color:#7f76ab; font-size:.82rem; margin-top:10px;}
+
+  /* SUGGESTION BOX */
+  .suggest{
+    margin-top:6px; padding-top:20px; border-top:2px dashed #342a63; text-align:left;
+  }
+  .suggest .slabel{font-weight:900; font-size:1.02rem; margin-bottom:10px;}
+  .suggest textarea{
+    width:100%; min-height:74px; resize:vertical; font-family:inherit; font-size:.95rem;
+    background:var(--card2); color:var(--text); border:2px solid #342a63; border-radius:12px;
+    padding:12px 14px; line-height:1.5;
+  }
+  .suggest textarea:focus{outline:none; border-color:var(--cyan);}
+  .sugbtn{
+    margin-top:10px; width:100%; border:none; cursor:pointer; font-family:inherit;
+    background:var(--card2); border:2px solid var(--lime); color:var(--lime);
+    font-weight:900; font-size:.95rem; text-transform:uppercase; letter-spacing:.05em;
+    padding:11px; border-radius:12px; transition:all .12s ease;
+  }
+  .sugbtn:hover:not(:disabled){background:var(--lime); color:#101c05;}
+  .sugbtn:disabled{opacity:.5; cursor:not-allowed;}
+  .sugstatus{margin-top:10px; font-weight:700; font-size:.9rem; color:var(--dim); min-height:1.2em;}
+  .sugstatus.ok{color:var(--green);}
+  .sugstatus.err{color:var(--red);}
 </style>
 </head>
 <body>
@@ -251,7 +290,31 @@
       <h1 class="title">Gen Alpha<br><span class="grad">Slang Check</span></h1>
       <p class="sub">10 random phrases. 4 meanings each — <b>all of them sound plausible</b>.<br>
       Pick what it actually means. Find out if you're a <b>certified rizzler</b>… or a <b>certified NPC</b>. 💀</p>
-      <button class="bigbtn" onclick="startRound()">Lock in 🔒</button>
+
+      <div class="chiplabel">First — what generation are you?</div>
+      <div class="chips" id="agechips">
+        <button class="chip" data-v="Gen Alpha">Gen Alpha</button>
+        <button class="chip" data-v="Gen Z">Gen Z</button>
+        <button class="chip" data-v="Millennial">Millennial</button>
+        <button class="chip" data-v="Gen X">Gen X</button>
+        <button class="chip" data-v="Boomer or earlier">Boomer or earlier</button>
+        <button class="chip" data-v="Prefer not to say">Prefer not to say</button>
+      </div>
+
+      <div class="chiplabel">And your connection to Gen Alpha?</div>
+      <div class="chips" id="relchips">
+        <button class="chip" data-v="I am Gen Alpha">I AM Gen Alpha 😤</button>
+        <button class="chip" data-v="Parent / caregiver">Parent / caregiver</button>
+        <button class="chip" data-v="Teacher / educator">Teacher / educator</button>
+        <button class="chip" data-v="Content moderator / trust & safety">Content moderator / T&S</button>
+        <button class="chip" data-v="Researcher">Researcher</button>
+        <button class="chip" data-v="Sibling / relative">Sibling / relative</button>
+        <button class="chip" data-v="Just here for the vibes">Just here for the vibes</button>
+      </div>
+
+      <div style="margin-top:24px;"></div>
+      <button class="bigbtn" id="lockbtn" onclick="startRound()" disabled>Lock in 🔒</button>
+      <div class="lockhint" id="lockhint">Pick your generation + connection to unlock</div>
       <div class="floaters"><span>🐐</span><span>💀</span><span>🔥</span><span>🚽</span><span>✨</span></div>
     </div>
     <footer>Built from a Gen Alpha slang benchmark · brainrot certified</footer>
@@ -285,6 +348,13 @@
       <p class="result-sub" id="rsub"></p>
       <div class="result-score" id="rscore">10 / 10</div>
       <div class="savestatus" id="savestatus"></div>
+      <div class="suggest">
+        <div class="slabel">Know a phrase we're missing? 👀</div>
+        <textarea id="sugtext" maxlength="500" placeholder="Drop any Gen Alpha slang we should add — one phrase or a whole list"></textarea>
+        <button class="sugbtn" id="sugbtn" onclick="sendSuggestion()">Send suggestion 📨</button>
+        <div class="sugstatus" id="sugstatus"></div>
+      </div>
+      <div style="margin-top:22px;"></div>
       <button class="bigbtn" onclick="startRound()">Run it back 🔁</button>
     </div>
     <footer>New round = 10 fresh phrases from the pool</footer>
@@ -388,8 +458,28 @@ const QUESTIONS = [
 const ROUND_SIZE = 10;
 let round = [], idx = 0, score = 0, streak = 0, answered = false;
 let currentUser = null, roundAnswers = [], roundStartedAt = null;
+let ageGroup = null, relationship = null;
 
 const $ = id => document.getElementById(id);
+
+/* ---------- demographic chips ---------- */
+function wireChips(containerId, setter){
+  document.querySelectorAll('#' + containerId + ' .chip').forEach(chip => {
+    chip.onclick = () => {
+      document.querySelectorAll('#' + containerId + ' .chip').forEach(c => c.classList.remove('sel'));
+      chip.classList.add('sel');
+      setter(chip.dataset.v);
+      updateLock();
+    };
+  });
+}
+function updateLock(){
+  const ready = !!(ageGroup && relationship);
+  $('lockbtn').disabled = !ready;
+  $('lockhint').style.display = ready ? 'none' : '';
+}
+wireChips('agechips', v => ageGroup = v);
+wireChips('relchips', v => relationship = v);
 
 /* ---------- auth plumbing (Firebase module below calls these) ---------- */
 function onUserChanged(user){
@@ -434,6 +524,7 @@ function show(id){
 
 function startRound(){
   if(!currentUser){ show('scr-login'); return; }
+  if(!ageGroup || !relationship){ show('scr-start'); return; }
   round = shuffle(QUESTIONS).slice(0, ROUND_SIZE);
   idx = 0; score = 0; streak = 0;
   roundAnswers = []; roundStartedAt = new Date();
@@ -522,9 +613,39 @@ function endRound(){
   $('rtitle').textContent = tier.t;
   $('rsub').textContent = tier.s;
   $('rscore').textContent = score + ' / ' + ROUND_SIZE;
+  $('sugtext').value = '';
+  $('sugstatus').className = 'sugstatus';
+  $('sugstatus').textContent = '';
+  $('sugbtn').disabled = false;
   show('scr-end');
   if(score >= 7) confetti();
   saveResult(tier.t);
+}
+
+function sendSuggestion(){
+  const text = $('sugtext').value.trim();
+  const el = $('sugstatus');
+  if(!text){ el.className = 'sugstatus err'; el.textContent = 'Type a phrase first 👆'; return; }
+  if(!window.firebaseAPI || !currentUser){
+    el.className = 'sugstatus err'; el.textContent = 'Not connected — suggestion could not be sent.'; return;
+  }
+  $('sugbtn').disabled = true;
+  el.className = 'sugstatus'; el.textContent = 'Sending… ⏳';
+  window.firebaseAPI.saveSuggestion({
+    uid: currentUser.uid,
+    name: currentUser.displayName || null,
+    email: currentUser.email || null,
+    ageGroup: ageGroup,
+    relationship: relationship,
+    suggestion: text
+  }).then(() => {
+    el.className = 'sugstatus ok'; el.textContent = 'Sent — thanks for the contribution! 🙏';
+    $('sugtext').value = '';
+  }).catch(err => {
+    $('sugbtn').disabled = false;
+    el.className = 'sugstatus err';
+    el.textContent = 'Could not send: ' + (err && err.code ? err.code : err);
+  });
 }
 
 function saveResult(tierTitle){
@@ -538,6 +659,8 @@ function saveResult(tierTitle){
     uid: currentUser.uid,
     name: currentUser.displayName || null,
     email: currentUser.email || null,
+    ageGroup: ageGroup,
+    relationship: relationship,
     score: score,
     total: ROUND_SIZE,
     tier: tierTitle,
@@ -602,7 +725,8 @@ if(notConfigured){
   window.firebaseAPI = {
     signIn:  () => signInWithPopup(auth, provider),
     signOut: () => signOut(auth),
-    saveResult: (data) => addDoc(collection(db, 'quiz_results'), { ...data, savedAt: serverTimestamp() })
+    saveResult: (data) => addDoc(collection(db, 'quiz_results'), { ...data, savedAt: serverTimestamp() }),
+    saveSuggestion: (data) => addDoc(collection(db, 'phrase_suggestions'), { ...data, savedAt: serverTimestamp() })
   };
 
   onAuthStateChanged(auth, user => onUserChanged(user));
