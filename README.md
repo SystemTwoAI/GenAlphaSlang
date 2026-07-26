@@ -45,7 +45,7 @@ The human side of the benchmark: a web quiz that serves **10 random Gen Alpha ex
 
 ## 📰 News
 
-- **2026-07** — *Gen Alpha Slang Check* launched on GitHub Pages, with LinkedIn share cards.
+- **2026-07** — *Gen Alpha Slang Check* launched on GitHub Pages.
 - **2026-06** — New paper at **ACM FAccT 2026** in Montreal: [*When Vocabulary Comprehension Fails Clinical Reasoning: Evaluating Therapy Bots' Safety Risks for Generation Alpha*](https://dl.acm.org/doi/10.1145/3805689.3806522).
 - **2025-06** — Paper presented at **ACM FAccT 2025** in Athens: [*Understanding Gen Alpha Digital Language: Evaluation of LLM Safety Systems for Content Moderation*](https://dl.acm.org/doi/full/10.1145/3715275.3732184) Coverage in [Fast Company](https://www.fastcompany.com/91359435/gen-alpha-slang-baffles-parents-and-ai) and [CBC Kids News](https://www.cbc.ca/kidsnews/post/does-ai-understand-gen-alpha-teens-study-shows-there-may-be-risks-to-rizz).
 
