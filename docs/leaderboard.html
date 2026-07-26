@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GenAlphaBench — Model Leaderboard</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="GenAlphaBench — Model Leaderboard">
+<meta property="og:description" content="How well do frontier AI models understand Gen Alpha slang and its safety implications? Live scores on 239 expressions.">
+<style>
+  :root{
+    --bg:#0d0b1e; --card:#171233; --card2:#1f1840;
+    --pink:#ff2e88; --lime:#b6ff2e; --cyan:#2ee6ff; --purple:#8b5cf6; --yellow:#ffd52e;
+    --text:#f4f1ff; --dim:#a99fd6; --border:#2c2358; --border2:#342a63;
+    --red:#ff4d5e; --green:#3ddc84;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); min-height:100vh; padding:32px 16px 60px;
+    position:relative; overflow-x:hidden;
+  }
+  body::before, body::after{
+    content:""; position:fixed; border-radius:50%; filter:blur(90px); opacity:.25; z-index:0; pointer-events:none;
+  }
+  body::before{width:420px;height:420px;background:var(--pink);top:-120px;left:-120px;}
+  body::after{width:420px;height:420px;background:var(--purple);bottom:-140px;right:-120px;}
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;}
+  .kicker{
+    display:inline-block; background:var(--lime); color:#101010; font-weight:800;
+    font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+    padding:6px 14px; border-radius:999px; transform:rotate(-2deg); margin-bottom:16px;
+  }
+  h1{
+    font-size:clamp(1.9rem,6vw,2.9rem); line-height:1.05; font-weight:900;
+    letter-spacing:-.02em; text-transform:uppercase; margin-bottom:12px;
+  }
+  h1 .grad{
+    background:linear-gradient(92deg,var(--pink),var(--yellow) 55%,var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .sub{color:var(--dim); font-size:1rem; line-height:1.55; max-width:760px; margin-bottom:18px;}
+  .sub b{color:var(--text);}
+  .metabox{
+    background:var(--card); border:3px solid var(--border); border-radius:18px;
+    padding:16px 20px; margin-bottom:14px; display:flex; flex-wrap:wrap; gap:10px 22px;
+    font-size:.88rem; color:var(--dim);
+  }
+  .metabox b{color:var(--text); font-weight:700;}
+  .metabox code{
+    background:var(--card2); border:1px solid var(--border2); border-radius:6px;
+    padding:1px 7px; font-size:.82rem; color:var(--cyan);
+  }
+  .metabox a{color:var(--cyan); text-decoration:none; font-weight:700;}
+  .metabox a:hover{text-decoration:underline;}
+  .protocol{font-size:.85rem; color:var(--dim); margin-bottom:22px; max-width:820px;}
+  .views{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; align-items:center;}
+  .viewbtn{
+    font-family:inherit; cursor:pointer; background:var(--card2); color:var(--dim);
+    border:2px solid var(--border2); border-radius:999px; padding:8px 16px;
+    font-weight:800; font-size:.85rem; transition:transform .1s ease;
+  }
+  .viewbtn:hover{transform:translateY(-1px);}
+  .viewbtn.active{
+    background:linear-gradient(92deg,var(--pink),var(--purple));
+    color:#fff; border-color:transparent;
+  }
+  .viewbtn .cnt{opacity:.75; font-weight:600;}
+  .card{
+    background:var(--card); border:3px solid var(--border); border-radius:24px;
+    padding:10px; box-shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+  .tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:16px;}
+  table{border-collapse:collapse; width:100%; min-width:900px; font-size:.92rem;}
+  thead th{
+    text-align:left; color:var(--dim); font-size:.72rem; letter-spacing:.1em;
+    text-transform:uppercase; font-weight:800; padding:12px 10px; white-space:nowrap;
+    cursor:pointer; user-select:none; border-bottom:2px solid var(--border2);
+    position:sticky; top:0; background:var(--card);
+  }
+  thead th.nosort{cursor:default;}
+  thead th .arrow{color:var(--pink); margin-left:3px;}
+  tbody td{padding:11px 10px; border-bottom:1px solid #241c4a; white-space:nowrap; vertical-align:middle;}
+  tbody tr.mainrow:hover{background:var(--card2);}
+  tbody tr.mainrow{cursor:pointer;}
+  td.rank{font-weight:900; color:var(--yellow); width:44px;}
+  td.model{font-weight:800;}
+  td.model .vid{display:block; font-weight:500; font-size:.72rem; color:var(--dim);}
+  .fam{
+    display:inline-block; font-size:.72rem; font-weight:800; padding:3px 10px; border-radius:999px;
+    border:2px solid var(--border2); color:var(--dim);
+  }
+  .fam.Claude{border-color:#7a5cff55; color:#b9a6ff;}
+  .fam.OpenAI{border-color:#2ee6ff55; color:var(--cyan);}
+  .fam.Google{border-color:#b6ff2e55; color:var(--lime);}
+  td.comp{min-width:170px;}
+  .compval{font-weight:900; font-size:1.02rem; margin-right:8px;}
+  .compbar{display:inline-block; vertical-align:middle; width:90px; height:9px;
+    background:var(--card2); border-radius:999px; overflow:hidden; border:1px solid var(--border2);}
+  .compbar i{display:block; height:100%; background:linear-gradient(90deg,var(--pink),var(--yellow),var(--lime)); border-radius:999px;}
+  .badge{
+    display:inline-block; font-size:.7rem; font-weight:900; letter-spacing:.06em;
+    text-transform:uppercase; padding:3px 10px; border-radius:999px;
+  }
+  .badge.paper{background:#2a2260; color:var(--cyan); border:2px solid #2ee6ff44;}
+  .badge.post-paper{background:#3d2a10; color:var(--yellow); border:2px solid #ffd52e55;}
+  tr.partial td{opacity:.5;}
+  tr.partial td.model{opacity:.65;}
+  tr.sep td{border-top:3px dashed var(--border2); padding:0; height:0;}
+  tr.riskrow{display:none;}
+  tr.riskrow.open{display:table-row;}
+  tr.riskrow td{background:#130f2b; padding:14px 16px 16px; white-space:normal;}
+  .riskgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px;}
+  .riskcell{background:var(--card2); border:2px solid var(--border2); border-radius:12px; padding:10px 12px;}
+  .riskcell .rc{font-weight:900; color:var(--pink); font-size:.8rem;}
+  .riskcell .rv{font-weight:900; font-size:1.05rem; margin:2px 0;}
+  .riskcell .rg{font-size:.72rem; color:var(--dim); line-height:1.35;}
+  .note{font-size:.78rem; color:var(--dim); font-style:italic;}
+  .foot{margin-top:22px; font-size:.82rem; color:var(--dim); line-height:1.6; max-width:860px;}
+  .foot h2{font-size:.8rem; text-transform:uppercase; letter-spacing:.12em; color:var(--text); margin-bottom:8px;}
+  .foot ol{margin-left:18px;}
+  .foot li{margin-bottom:6px;}
+  .backlink{display:inline-block; margin-top:26px; color:var(--cyan); font-weight:800; text-decoration:none;}
+  .backlink:hover{text-decoration:underline;}
+  .err{background:#3a1020; border:2px solid var(--red); color:#ffd7de; border-radius:12px; padding:14px 16px; margin:14px 0;}
+  @media (max-width:640px){ body{padding:20px 8px 40px;} .card{padding:6px; border-radius:16px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kicker">GenAlphaBench · Official Scores</span>
+  <h1><span class="grad">Model Leaderboard</span></h1>
+  <p class="sub"><b>GenAlphaBench</b> measures how well AI models understand Gen Alpha slang — meaning, platform context, safety implications, and harm-risk calibration — against annotated ground truth on <b>239 expressions</b>.</p>
+
+  <div class="metabox" id="metabox">Loading…</div>
+  <p class="protocol">Scores are produced by an LLM-judge protocol against annotated ground truth; see paper §4.2. Composite is the judged total out of 20; the four dimension scores are each out of 5. Click a row for per-risk-category means.</p>
+
+  <div class="views" id="views" role="tablist" aria-label="Expression set"></div>
+
+  <div class="card">
+    <div class="tablewrap">
+      <table id="lb" aria-label="GenAlphaBench model leaderboard">
+        <thead><tr id="headrow"></tr></thead>
+        <tbody id="body"><tr><td class="note" style="padding:20px">Loading leaderboard data…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="foot">
+    <h2>Footnotes</h2>
+    <ol id="footnotes"></ol>
+  </div>
+
+  <a class="backlink" href="index.html">← Take the Gen Alpha Slang Check quiz</a>
+</div>
+
+<noscript><div class="err">This leaderboard needs JavaScript to render its data table.</div></noscript>
+
+<script>
+(function(){
+  "use strict";
+  var RISK_GLOSS = {
+    R0: "Neutral — no inherent capacity for harm",
+    R1: "Direct Harm — explicit threats or unambiguous harmful meaning",
+    R2: "Masked Negativity — reads friendly, can cut deep",
+    R3: "Evolution-based — meaning has drifted across generations",
+    R4: "Highly Context-Dependent — genuine or mocking depending on context",
+    R5: "Regional/Cultural — dialect- and community-specific (e.g. AAVE)"
+  };
+  var COLS = [
+    {key:"rank",    label:"#",         sort:null},
+    {key:"model",   label:"Model",     sort:"model"},
+    {key:"family",  label:"Family",    sort:"family"},
+    {key:"composite",label:"Composite /20", sort:"composite"},
+    {key:"meaning", label:"Meaning /5",sort:"dim.meaning"},
+    {key:"context", label:"Context /5",sort:"dim.context"},
+    {key:"safety",  label:"Safety /5", sort:"dim.safety"},
+    {key:"rating",  label:"Rating /5", sort:"dim.rating"},
+    {key:"n",       label:"N evaluated", sort:"n_evaluated"},
+    {key:"date",    label:"Evaluated", sort:"evaluated_date"},
+    {key:"cohort",  label:"Cohort",    sort:"cohort"}
+  ];
+  var state = {entries:[], meta:null, sortKey:"composite", sortDir:-1, view:"combined"};
+
+  // Stats object for the active view: the entry itself (combined) or one of
+  // its expression-set splits. Null when the model has no data in that split.
+  function vs(e){
+    if (state.view === "combined") return e;
+    return (e.splits && e.splits[state.view]) || null;
+  }
+  function get(e, path){
+    var s = vs(e);
+    if (path === "model" || path === "family" || path === "cohort" || path === "evaluated_date") return e[path];
+    if (!s) return null;
+    if (path === "dim.meaning") return s.dimensions.meaning;
+    if (path === "dim.context") return s.dimensions.context;
+    if (path === "dim.safety")  return s.dimensions.safety;
+    if (path === "dim.rating")  return s.dimensions.rating;
+    return s[path];
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function fmt(v){ return (v === null || v === undefined) ? "—" : (typeof v === "number" ? v.toFixed(2) : esc(v)); }
+
+  function renderMeta(m){
+    var el = document.getElementById("metabox");
+    var links = [];
+    if (m.links && m.links.dataset) links.push('<a href="'+esc(m.links.dataset)+'">Dataset</a>');
+    if (m.links && m.links.paper)   links.push('<a href="'+esc(m.links.paper)+'">Paper</a>');
+    if (m.links && m.links.repo)    links.push('<a href="'+esc(m.links.repo)+'">Repo</a>');
+    el.innerHTML =
+      '<span><b>Dataset:</b> '+esc(m.dataset_version)+' ('+m.n_expressions+' expressions)</span>' +
+      '<span><b>Judge:</b> <code>'+esc(m.judge_model)+'</code> @ temp '+m.judge_temperature+'</span>' +
+      '<span><b>Last updated:</b> '+esc(m.last_updated)+'</span>' +
+      '<span><b>Paper:</b> '+esc(m.paper)+'</span>' +
+      (links.length ? '<span>'+links.join(" · ")+'</span>' : '');
+  }
+
+  function renderHead(){
+    var tr = document.getElementById("headrow");
+    tr.innerHTML = "";
+    COLS.forEach(function(c){
+      var th = document.createElement("th");
+      th.textContent = c.label;
+      if (!c.sort){ th.className = "nosort"; }
+      else {
+        if (state.sortKey === c.sort){
+          var a = document.createElement("span");
+          a.className = "arrow";
+          a.textContent = state.sortDir === -1 ? "▼" : "▲";
+          th.appendChild(a);
+        }
+        th.addEventListener("click", function(){
+          if (state.sortKey === c.sort) state.sortDir = -state.sortDir;
+          else { state.sortKey = c.sort; state.sortDir = -1; }
+          render();
+        });
+      }
+      tr.appendChild(th);
+    });
+  }
+
+  function sorted(){
+    var full = state.entries.filter(function(e){ return !e.partial_coverage; });
+    var partial = state.entries.filter(function(e){ return e.partial_coverage; });
+    var cmp = function(a, b){
+      var va = get(a, state.sortKey), vb = get(b, state.sortKey);
+      if (va === vb) return (get(b, "composite") || 0) - (get(a, "composite") || 0);
+      if (va === null || va === undefined) return 1;
+      if (vb === null || vb === undefined) return -1;
+      if (typeof va === "string") return state.sortDir * va.localeCompare(vb);
+      return state.sortDir * (va - vb);
+    };
+    full.sort(cmp); partial.sort(cmp);
+    return {full: full, partial: partial};
+  }
+
+  function viewDenom(){
+    if (state.view === "combined") return state.meta.n_expressions;
+    return state.meta.splits[state.view].n;
+  }
+
+  function rowHTML(e, rank){
+    var s = vs(e) || {dimensions: {}};
+    var dims = s.dimensions || {};
+    var pct = Math.max(0, Math.min(100, (s.composite || 0) / 20 * 100));
+    return (
+      '<td class="rank">'+(e.partial_coverage ? "—" : rank)+'</td>' +
+      '<td class="model">'+esc(e.model)+
+        (e.vendor_id ? '<span class="vid">'+esc(e.vendor_id)+'</span>' : "")+
+        (e.notes ? '<span class="vid note">'+esc(e.notes)+'</span>' : "")+'</td>' +
+      '<td><span class="fam '+esc(e.family)+'">'+esc(e.family)+'</span></td>' +
+      '<td class="comp"><span class="compval">'+fmt(s.composite)+'</span>' +
+        '<span class="compbar"><i style="width:'+pct+'%"></i></span></td>' +
+      '<td>'+fmt(dims.meaning)+'</td><td>'+fmt(dims.context)+'</td>' +
+      '<td>'+fmt(dims.safety)+'</td><td>'+fmt(dims.rating)+'</td>' +
+      '<td>'+(s.n_evaluated != null ? s.n_evaluated : "—")+' / '+viewDenom()+'</td>' +
+      '<td>'+esc(e.evaluated_date || "—")+'</td>' +
+      '<td><span class="badge '+esc(e.cohort)+'">'+esc(e.cohort)+'</span></td>'
+    );
+  }
+
+  function riskRowHTML(e){
+    var s = vs(e) || {};
+    var cells = Object.keys(RISK_GLOSS).map(function(rc){
+      var v = s.by_risk && (rc in s.by_risk) ? s.by_risk[rc].toFixed(2) : "—";
+      return '<div class="riskcell"><div class="rc">'+rc+'</div><div class="rv">'+v+
+             ' <span style="font-size:.7rem;color:var(--dim)">/20</span></div>' +
+             '<div class="rg">'+esc(RISK_GLOSS[rc])+'</div></div>';
+    }).join("");
+    return '<td colspan="'+COLS.length+'"><div class="riskgrid">'+cells+'</div></td>';
+  }
+
+  function renderViews(){
+    var box = document.getElementById("views");
+    box.innerHTML = "";
+    var opts = [["combined", "Combined", state.meta.n_expressions + " expressions"]];
+    Object.keys(state.meta.splits || {}).forEach(function(k){
+      var sp = state.meta.splits[k];
+      opts.push([k, sp.label, sp.expressions + " · " + sp.n]);
+    });
+    opts.forEach(function(o){
+      var b = document.createElement("button");
+      b.className = "viewbtn" + (state.view === o[0] ? " active" : "");
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", state.view === o[0] ? "true" : "false");
+      b.innerHTML = esc(o[1]) + ' <span class="cnt">' + esc(o[2]) + "</span>";
+      b.addEventListener("click", function(){
+        state.view = o[0];
+        renderViews(); render();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function computeRanks(){
+    // Rank is fixed per view by that view's composite (descending) among
+    // full-coverage entries, independent of the user's sort column.
+    ["combined"].concat(Object.keys(state.meta.splits || {})).forEach(function(view){
+      var prev = state.view; state.view = view;
+      state.entries
+        .filter(function(e){ return !e.partial_coverage && vs(e); })
+        .sort(function(a, b){ return vs(b).composite - vs(a).composite; })
+        .forEach(function(e, i){ (e._ranks = e._ranks || {})[view] = i + 1; });
+      state.view = prev;
+    });
+  }
+
+  function render(){
+    renderHead();
+    var body = document.getElementById("body");
+    body.innerHTML = "";
+    var s = sorted();
+    var addRows = function(e){
+      var tr = document.createElement("tr");
+      tr.className = "mainrow" + (e.partial_coverage ? " partial" : "");
+      tr.innerHTML = rowHTML(e, (e._ranks && e._ranks[state.view]) || "—");
+      var rr = document.createElement("tr");
+      rr.className = "riskrow";
+      rr.innerHTML = riskRowHTML(e);
+      tr.addEventListener("click", function(){ rr.classList.toggle("open"); });
+      body.appendChild(tr); body.appendChild(rr);
+    };
+    s.full.forEach(addRows);
+    if (s.partial.length){
+      var sep = document.createElement("tr");
+      sep.className = "sep";
+      sep.innerHTML = '<td colspan="'+COLS.length+'"></td>';
+      body.appendChild(sep);
+      s.partial.forEach(addRows);
+    }
+  }
+
+  function renderFootnotes(m){
+    var ol = document.getElementById("footnotes");
+    ol.innerHTML = "";
+    (m.footnotes || []).forEach(function(f){
+      var li = document.createElement("li");
+      li.textContent = f;
+      ol.appendChild(li);
+    });
+  }
+
+  fetch("data/leaderboard.json")
+    .then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(d){
+      state.meta = d.meta; state.entries = d.entries;
+      computeRanks();
+      renderMeta(d.meta); renderFootnotes(d.meta); renderViews(); render();
+    })
+    .catch(function(err){
+      document.getElementById("body").innerHTML =
+        '<tr><td colspan="11"><div class="err">Could not load leaderboard data ('+esc(err.message)+'). ' +
+        'The data file lives at <code>data/leaderboard.json</code> in this site.</div></td></tr>';
+    });
+})();
+</script>
+</body>
+</html>
