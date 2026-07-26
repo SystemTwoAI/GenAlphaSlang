@@ -45,6 +45,7 @@ The human side of the benchmark: a web quiz that serves **10 random Gen Alpha ex
 
 ## 📰 News
 
+- **2026-06** — New paper at **ACM FAccT 2026** in Montreal: [*When Vocabulary Comprehension Fails Clinical Reasoning: Evaluating Therapy Bots' Safety Risks for Generation Alpha*](https://dl.acm.org/doi/10.1145/3805689.3806522).
 - **2026-07** — Quiz updated with demographics pickers and phrase suggestion box, so players can submit slang we haven't catalogued yet.
 - **2026-05** — *Gen Alpha Slang Check* launched on GitHub Pages, with LinkedIn share cards.
 - **2025-06** — Paper presented at **ACM FAccT 2025** in Athens. Coverage in [Fast Company](https://www.fastcompany.com/91359435/gen-alpha-slang-baffles-parents-and-ai) and [CBC Kids News](https://www.cbc.ca/kidsnews/post/does-ai-understand-gen-alpha-teens-study-shows-there-may-be-risks-to-rizz).
@@ -93,6 +94,16 @@ Expression ranges are processed in three batches: `1-100`, `101-181`, `182-239`.
   year      = {2025},
   doi       = {10.1145/3715275.3732184},
   url       = {https://arxiv.org/abs/2505.10588}
+}
+
+@inproceedings{mehta2026therapybots,
+  title     = {When Vocabulary Comprehension Fails Clinical Reasoning: Evaluating Therapy Bots' Safety Risks for Generation Alpha},
+  author    = {Mehta, Manisha and Mehta, Virendra},
+  booktitle = {Proceedings of the 2026 ACM Conference on Fairness, Accountability, and Transparency (FAccT '26)},
+  year      = {2026},
+  pages     = {1681--1720},
+  doi       = {10.1145/3805689.3806522},
+  url       = {https://dl.acm.org/doi/10.1145/3805689.3806522}
 }
 ```
 
