@@ -135,7 +135,9 @@
   <div class="metabox" id="metabox">Loading…</div>
   <p class="protocol">Scores are produced by an LLM-judge protocol against annotated ground truth; see paper §4.2. Composite is the judged total out of 20; the four dimension scores are each out of 5. Click a row for per-risk-category means.</p>
 
+  <div class="views" id="judges" role="tablist" aria-label="Judge"></div>
   <div class="views" id="views" role="tablist" aria-label="Expression set"></div>
+  <p class="protocol" id="crossnote" style="display:none; color:var(--yellow); font-weight:700;">⚠️ GPT-5.5 cross-judge view — consistency validation only. These scores are not comparable with the canonical Opus-4.6-judged leaderboard.</p>
 
   <div class="card">
     <div class="tablewrap">
@@ -180,7 +182,12 @@
     {key:"date",    label:"Evaluated", sort:"evaluated_date"},
     {key:"cohort",  label:"Cohort",    sort:"cohort"}
   ];
-  var state = {entries:[], meta:null, sortKey:"composite", sortDir:-1, view:"combined"};
+  var DATASETS = {
+    opus46: {url: "data/leaderboard.json", label: "Opus 4.6", tag: "canonical"},
+    gpt55:  {url: "data/leaderboard_gpt55.json", label: "GPT-5.5", tag: "cross-judge"}
+  };
+  var cache = {};
+  var state = {entries:[], meta:null, sortKey:"composite", sortDir:-1, view:"combined", judge:"opus46"};
 
   // Stats object for the active view: the entry itself (combined) or one of
   // its expression-set splits. Null when the model has no data in that split.
@@ -294,6 +301,23 @@
     return '<td colspan="'+COLS.length+'"><div class="riskgrid">'+cells+'</div></td>';
   }
 
+  function renderJudges(){
+    var box = document.getElementById("judges");
+    box.innerHTML = '<span style="color:var(--dim);font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;">Judge:</span>';
+    Object.keys(DATASETS).forEach(function(k){
+      var d = DATASETS[k];
+      var b = document.createElement("button");
+      b.className = "viewbtn" + (state.judge === k ? " active" : "");
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", state.judge === k ? "true" : "false");
+      b.innerHTML = esc(d.label) + ' <span class="cnt">' + esc(d.tag) + "</span>";
+      b.addEventListener("click", function(){ if (state.judge !== k) loadJudge(k); });
+      box.appendChild(b);
+    });
+    document.getElementById("crossnote").style.display =
+      (state.meta && state.meta.judge_role === "cross-judge") ? "" : "none";
+  }
+
   function renderViews(){
     var box = document.getElementById("views");
     box.innerHTML = "";
@@ -364,18 +388,25 @@
     });
   }
 
-  fetch("data/leaderboard.json")
-    .then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-    .then(function(d){
+  function loadJudge(key){
+    var apply = function(d){
+      state.judge = key;
       state.meta = d.meta; state.entries = d.entries;
       computeRanks();
-      renderMeta(d.meta); renderFootnotes(d.meta); renderViews(); render();
-    })
-    .catch(function(err){
-      document.getElementById("body").innerHTML =
-        '<tr><td colspan="11"><div class="err">Could not load leaderboard data ('+esc(err.message)+'). ' +
-        'The data file lives at <code>data/leaderboard.json</code> in this site.</div></td></tr>';
-    });
+      renderMeta(d.meta); renderFootnotes(d.meta); renderJudges(); renderViews(); render();
+    };
+    if (cache[key]) { apply(cache[key]); return; }
+    fetch(DATASETS[key].url)
+      .then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function(d){ cache[key] = d; apply(d); })
+      .catch(function(err){
+        document.getElementById("body").innerHTML =
+          '<tr><td colspan="11"><div class="err">Could not load leaderboard data ('+esc(err.message)+'). ' +
+          'The data file lives at <code>'+esc(DATASETS[key].url)+'</code> in this site.</div></td></tr>';
+      });
+  }
+
+  loadJudge("opus46");
 })();
 </script>
 </body>
