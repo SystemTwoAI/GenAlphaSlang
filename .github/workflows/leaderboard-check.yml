@@ -26,9 +26,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Validate scores (canonical cleaning rules)
-        run: python3 scripts/validate_scores.py results/scores/opus46_all239_per_dimension_long.csv
-      - name: Build leaderboard (Table-2 acceptance gate)
+      - name: Validate scores (canonical cleaning rules, both judges)
+        run: |
+          python3 scripts/validate_scores.py results/scores/opus46_all239_per_dimension_long.csv
+          python3 scripts/validate_scores.py results/scores/gpt55_all239_per_dimension_long.csv
+      - name: Build leaderboards (acceptance gates)
         run: python3 scripts/build_leaderboard.py
       - name: Committed JSON must match rebuilt JSON
-        run: git diff --exit-code docs/data/leaderboard.json
+        run: git diff --exit-code docs/data/leaderboard.json docs/data/leaderboard_gpt55.json
