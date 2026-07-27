@@ -1,0 +1,1041 @@
+{
+  "meta": {
+    "dataset_version": "v7.4",
+    "n_expressions": 239,
+    "judge_model": "gpt-5.5",
+    "judge_temperature": 0.0,
+    "judge_role": "cross-judge",
+    "last_updated": "2026-07-27",
+    "paper": "GenAlphaBench (NeurIPS 2026 D&B submission 3764)",
+    "links": {
+      "dataset": "https://huggingface.co/datasets/systemtwoai/GenAlphaBench",
+      "paper": "",
+      "repo": "https://github.com/SystemTwoAI/GenAlphaSlang"
+    },
+    "splits": {
+      "original": {
+        "label": "Original benchmark",
+        "expressions": "1\u2013100",
+        "n": 100
+      },
+      "updated": {
+        "label": "Updated set",
+        "expressions": "101\u2013239",
+        "n": 139
+      }
+    },
+    "footnotes": [
+      "GPT-5.5 is the cross-judge used for consistency validation (paper \u00a74.2). The canonical leaderboard uses the pinned Opus 4.6 judge; scores are NOT directly comparable across judges.",
+      "Haiku 3.0 was evaluated on 81 of 239 expressions and is excluded from aggregate comparisons; it is shown for reference only.",
+      "Cleaning: rows flagged missing are dropped, and any (expression, model) pair whose judged total is exactly 0 is treated as an unjudged/empty response and removed before averaging (under this judge: Gemini-2.0-Flash \u00d796, hence its n of 127)."
+    ]
+  },
+  "entries": [
+    {
+      "model": "Opus 4.7",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 17.47,
+      "dimensions": {
+        "meaning": 4.81,
+        "context": 4.87,
+        "safety": 4.27,
+        "rating": 3.52
+      },
+      "by_risk": {
+        "R0": 17.79,
+        "R1": 16.95,
+        "R2": 17.46,
+        "R3": 16.96,
+        "R4": 17.33,
+        "R5": 17.07
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 17.26,
+          "dimensions": {
+            "meaning": 4.9,
+            "context": 4.92,
+            "safety": 4.23,
+            "rating": 3.2
+          },
+          "by_risk": {
+            "R0": 17.66,
+            "R1": 16.45,
+            "R2": 17.43,
+            "R3": 16.77,
+            "R4": 13.35,
+            "R5": 16.93
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 17.63,
+          "dimensions": {
+            "meaning": 4.74,
+            "context": 4.83,
+            "safety": 4.31,
+            "rating": 3.74
+          },
+          "by_risk": {
+            "R0": 17.92,
+            "R1": 17.1,
+            "R2": 17.48,
+            "R3": 17.07,
+            "R4": 18.32,
+            "R5": 17.12
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Opus 4.6",
+      "family": "Claude",
+      "vendor_id": "claude-opus-4-6-20260401",
+      "n_evaluated": 239,
+      "composite": 16.93,
+      "dimensions": {
+        "meaning": 4.7,
+        "context": 4.81,
+        "safety": 4.18,
+        "rating": 3.24
+      },
+      "by_risk": {
+        "R0": 17.25,
+        "R1": 16.24,
+        "R2": 16.65,
+        "R3": 17.11,
+        "R4": 17.02,
+        "R5": 15.81
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 16.63,
+          "dimensions": {
+            "meaning": 4.79,
+            "context": 4.84,
+            "safety": 4.17,
+            "rating": 2.83
+          },
+          "by_risk": {
+            "R0": 17.17,
+            "R1": 13.95,
+            "R2": 16.6,
+            "R3": 16.37,
+            "R4": 13.25,
+            "R5": 16.6
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 17.14,
+          "dimensions": {
+            "meaning": 4.63,
+            "context": 4.78,
+            "safety": 4.18,
+            "rating": 3.54
+          },
+          "by_risk": {
+            "R0": 17.32,
+            "R1": 16.95,
+            "R2": 16.69,
+            "R3": 17.54,
+            "R4": 17.96,
+            "R5": 15.51
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "o3",
+      "family": "OpenAI",
+      "vendor_id": "",
+      "n_evaluated": 238,
+      "composite": 16.58,
+      "dimensions": {
+        "meaning": 4.41,
+        "context": 4.53,
+        "safety": 3.92,
+        "rating": 3.72
+      },
+      "by_risk": {
+        "R0": 16.74,
+        "R1": 15.67,
+        "R2": 16.84,
+        "R3": 16.21,
+        "R4": 17.02,
+        "R5": 15.27
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 16.54,
+          "dimensions": {
+            "meaning": 4.55,
+            "context": 4.58,
+            "safety": 3.83,
+            "rating": 3.57
+          },
+          "by_risk": {
+            "R0": 16.52,
+            "R1": 13.9,
+            "R2": 17.33,
+            "R3": 16.42,
+            "R4": 13.18,
+            "R5": 18.13
+          }
+        },
+        "updated": {
+          "n_evaluated": 138,
+          "composite": 16.62,
+          "dimensions": {
+            "meaning": 4.32,
+            "context": 4.49,
+            "safety": 3.99,
+            "rating": 3.83
+          },
+          "by_risk": {
+            "R0": 16.96,
+            "R1": 16.22,
+            "R2": 16.43,
+            "R3": 16.09,
+            "R4": 17.98,
+            "R5": 14.04
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Sonnet 4.6",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 238,
+      "composite": 16.47,
+      "dimensions": {
+        "meaning": 4.48,
+        "context": 4.46,
+        "safety": 4.1,
+        "rating": 3.42
+      },
+      "by_risk": {
+        "R0": 17.49,
+        "R1": 14.79,
+        "R2": 15.69,
+        "R3": 15.72,
+        "R4": 16.79,
+        "R5": 15.19
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 99,
+          "composite": 16.56,
+          "dimensions": {
+            "meaning": 4.64,
+            "context": 4.6,
+            "safety": 4.21,
+            "rating": 3.11
+          },
+          "by_risk": {
+            "R0": 17.44,
+            "R1": 13.7,
+            "R2": 16.46,
+            "R3": 14.73,
+            "R4": 12.73,
+            "R5": 16.67
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 16.4,
+          "dimensions": {
+            "meaning": 4.37,
+            "context": 4.36,
+            "safety": 4.02,
+            "rating": 3.63
+          },
+          "by_risk": {
+            "R0": 17.54,
+            "R1": 15.12,
+            "R2": 15.03,
+            "R3": 16.29,
+            "R4": 17.55,
+            "R5": 14.64
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Opus 4.5",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 16.41,
+      "dimensions": {
+        "meaning": 4.59,
+        "context": 4.2,
+        "safety": 4.02,
+        "rating": 3.57
+      },
+      "by_risk": {
+        "R0": 17.26,
+        "R1": 15.85,
+        "R2": 15.94,
+        "R3": 16.11,
+        "R4": 15.48,
+        "R5": 14.29
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 16.41,
+          "dimensions": {
+            "meaning": 4.71,
+            "context": 4.3,
+            "safety": 4.02,
+            "rating": 3.34
+          },
+          "by_risk": {
+            "R0": 17.35,
+            "R1": 14.68,
+            "R2": 16.06,
+            "R3": 15.55,
+            "R4": 11.62,
+            "R5": 15.53
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 16.4,
+          "dimensions": {
+            "meaning": 4.51,
+            "context": 4.13,
+            "safety": 4.02,
+            "rating": 3.74
+          },
+          "by_risk": {
+            "R0": 17.18,
+            "R1": 16.21,
+            "R2": 15.85,
+            "R3": 16.44,
+            "R4": 16.45,
+            "R5": 13.82
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Gemini-2.5-Pro",
+      "family": "Google",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 16.13,
+      "dimensions": {
+        "meaning": 4.49,
+        "context": 4.57,
+        "safety": 3.9,
+        "rating": 3.17
+      },
+      "by_risk": {
+        "R0": 16.57,
+        "R1": 15.96,
+        "R2": 16.08,
+        "R3": 15.65,
+        "R4": 16.16,
+        "R5": 13.9
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 16.12,
+          "dimensions": {
+            "meaning": 4.73,
+            "context": 4.72,
+            "safety": 3.87,
+            "rating": 2.8
+          },
+          "by_risk": {
+            "R0": 16.55,
+            "R1": 14.78,
+            "R2": 16.31,
+            "R3": 15.4,
+            "R4": 12.68,
+            "R5": 16.23
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 16.14,
+          "dimensions": {
+            "meaning": 4.33,
+            "context": 4.46,
+            "safety": 3.92,
+            "rating": 3.44
+          },
+          "by_risk": {
+            "R0": 16.59,
+            "R1": 16.32,
+            "R2": 15.89,
+            "R3": 15.79,
+            "R4": 17.03,
+            "R5": 13.02
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Opus 4.0",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 15.29,
+      "dimensions": {
+        "meaning": 4.17,
+        "context": 3.85,
+        "safety": 3.52,
+        "rating": 3.76
+      },
+      "by_risk": {
+        "R0": 16.29,
+        "R1": 15.36,
+        "R2": 14.92,
+        "R3": 14.46,
+        "R4": 13.61,
+        "R5": 13.29
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 15.46,
+          "dimensions": {
+            "meaning": 4.37,
+            "context": 3.99,
+            "safety": 3.54,
+            "rating": 3.56
+          },
+          "by_risk": {
+            "R0": 16.33,
+            "R1": 14.78,
+            "R2": 15.3,
+            "R3": 13.8,
+            "R4": 11.3,
+            "R5": 14.43
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 15.18,
+          "dimensions": {
+            "meaning": 4.03,
+            "context": 3.75,
+            "safety": 3.51,
+            "rating": 3.9
+          },
+          "by_risk": {
+            "R0": 16.25,
+            "R1": 15.54,
+            "R2": 14.59,
+            "R3": 14.84,
+            "R4": 14.19,
+            "R5": 12.86
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "GPT-4.1",
+      "family": "OpenAI",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 15.24,
+      "dimensions": {
+        "meaning": 4.29,
+        "context": 3.92,
+        "safety": 3.69,
+        "rating": 3.33
+      },
+      "by_risk": {
+        "R0": 16.16,
+        "R1": 13.79,
+        "R2": 15.1,
+        "R3": 13.6,
+        "R4": 15.41,
+        "R5": 13.84
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 14.93,
+          "dimensions": {
+            "meaning": 4.4,
+            "context": 3.95,
+            "safety": 3.58,
+            "rating": 2.99
+          },
+          "by_risk": {
+            "R0": 16.15,
+            "R1": 10.95,
+            "R2": 14.91,
+            "R3": 11.97,
+            "R4": 11.55,
+            "R5": 15.0
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 15.46,
+          "dimensions": {
+            "meaning": 4.21,
+            "context": 3.9,
+            "safety": 3.77,
+            "rating": 3.58
+          },
+          "by_risk": {
+            "R0": 16.17,
+            "R1": 14.66,
+            "R2": 15.27,
+            "R3": 14.54,
+            "R4": 16.37,
+            "R5": 13.4
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Gemini-2.5-Flash",
+      "family": "Google",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 14.96,
+      "dimensions": {
+        "meaning": 4.2,
+        "context": 4.21,
+        "safety": 3.54,
+        "rating": 3.01
+      },
+      "by_risk": {
+        "R0": 15.74,
+        "R1": 12.91,
+        "R2": 14.68,
+        "R3": 14.25,
+        "R4": 15.29,
+        "R5": 13.76
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 15.02,
+          "dimensions": {
+            "meaning": 4.51,
+            "context": 4.42,
+            "safety": 3.5,
+            "rating": 2.58
+          },
+          "by_risk": {
+            "R0": 15.53,
+            "R1": 12.82,
+            "R2": 15.47,
+            "R3": 13.32,
+            "R4": 12.2,
+            "R5": 15.2
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 14.92,
+          "dimensions": {
+            "meaning": 3.98,
+            "context": 4.05,
+            "safety": 3.56,
+            "rating": 3.32
+          },
+          "by_risk": {
+            "R0": 15.94,
+            "R1": 12.94,
+            "R2": 14.02,
+            "R3": 14.79,
+            "R4": 16.06,
+            "R5": 13.22
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Haiku 4.5",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 14.59,
+      "dimensions": {
+        "meaning": 3.86,
+        "context": 4.06,
+        "safety": 3.49,
+        "rating": 3.18
+      },
+      "by_risk": {
+        "R0": 15.9,
+        "R1": 11.78,
+        "R2": 14.16,
+        "R3": 13.85,
+        "R4": 14.12,
+        "R5": 11.85
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 14.89,
+          "dimensions": {
+            "meaning": 4.2,
+            "context": 4.31,
+            "safety": 3.57,
+            "rating": 2.81
+          },
+          "by_risk": {
+            "R0": 16.05,
+            "R1": 12.15,
+            "R2": 15.24,
+            "R3": 11.79,
+            "R4": 10.32,
+            "R5": 13.2
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 14.37,
+          "dimensions": {
+            "meaning": 3.61,
+            "context": 3.89,
+            "safety": 3.43,
+            "rating": 3.44
+          },
+          "by_risk": {
+            "R0": 15.76,
+            "R1": 11.67,
+            "R2": 13.25,
+            "R3": 15.04,
+            "R4": 15.06,
+            "R5": 11.35
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Sonnet 4.0",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 14.58,
+      "dimensions": {
+        "meaning": 4.1,
+        "context": 3.73,
+        "safety": 3.25,
+        "rating": 3.5
+      },
+      "by_risk": {
+        "R0": 15.21,
+        "R1": 14.01,
+        "R2": 14.6,
+        "R3": 14.09,
+        "R4": 13.76,
+        "R5": 12.44
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 14.92,
+          "dimensions": {
+            "meaning": 4.3,
+            "context": 3.86,
+            "safety": 3.33,
+            "rating": 3.43
+          },
+          "by_risk": {
+            "R0": 15.54,
+            "R1": 15.05,
+            "R2": 15.07,
+            "R3": 13.55,
+            "R4": 10.7,
+            "R5": 13.5
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 14.34,
+          "dimensions": {
+            "meaning": 3.96,
+            "context": 3.64,
+            "safety": 3.2,
+            "rating": 3.54
+          },
+          "by_risk": {
+            "R0": 14.88,
+            "R1": 13.68,
+            "R2": 14.21,
+            "R3": 14.4,
+            "R4": 14.52,
+            "R5": 12.04
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "o4-mini",
+      "family": "OpenAI",
+      "vendor_id": "",
+      "n_evaluated": 236,
+      "composite": 14.49,
+      "dimensions": {
+        "meaning": 3.79,
+        "context": 3.69,
+        "safety": 3.22,
+        "rating": 3.79
+      },
+      "by_risk": {
+        "R0": 15.84,
+        "R1": 10.64,
+        "R2": 14.1,
+        "R3": 14.18,
+        "R4": 13.84,
+        "R5": 11.89
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 15.29,
+          "dimensions": {
+            "meaning": 4.18,
+            "context": 3.91,
+            "safety": 3.39,
+            "rating": 3.81
+          },
+          "by_risk": {
+            "R0": 16.47,
+            "R1": 12.38,
+            "R2": 15.1,
+            "R3": 13.43,
+            "R4": 11.85,
+            "R5": 12.13
+          }
+        },
+        "updated": {
+          "n_evaluated": 136,
+          "composite": 13.9,
+          "dimensions": {
+            "meaning": 3.49,
+            "context": 3.54,
+            "safety": 3.09,
+            "rating": 3.78
+          },
+          "by_risk": {
+            "R0": 15.2,
+            "R1": 10.1,
+            "R2": 13.26,
+            "R3": 14.63,
+            "R4": 14.34,
+            "R5": 11.79
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "GPT-4o",
+      "family": "OpenAI",
+      "vendor_id": "",
+      "n_evaluated": 237,
+      "composite": 13.27,
+      "dimensions": {
+        "meaning": 3.64,
+        "context": 3.19,
+        "safety": 2.93,
+        "rating": 3.51
+      },
+      "by_risk": {
+        "R0": 14.13,
+        "R1": 11.59,
+        "R2": 13.35,
+        "R3": 12.2,
+        "R4": 12.69,
+        "R5": 11.4
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 98,
+          "composite": 13.34,
+          "dimensions": {
+            "meaning": 3.84,
+            "context": 3.23,
+            "safety": 2.91,
+            "rating": 3.35
+          },
+          "by_risk": {
+            "R0": 14.13,
+            "R1": 11.02,
+            "R2": 13.8,
+            "R3": 11.03,
+            "R4": 9.43,
+            "R5": 11.47
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 13.22,
+          "dimensions": {
+            "meaning": 3.49,
+            "context": 3.15,
+            "safety": 2.95,
+            "rating": 3.62
+          },
+          "by_risk": {
+            "R0": 14.12,
+            "R1": 11.77,
+            "R2": 12.98,
+            "R3": 12.87,
+            "R4": 13.31,
+            "R5": 11.37
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Gemini-2.0-Flash",
+      "family": "Google",
+      "vendor_id": "",
+      "n_evaluated": 127,
+      "composite": 11.99,
+      "dimensions": {
+        "meaning": 3.33,
+        "context": 3.24,
+        "safety": 2.66,
+        "rating": 2.75
+      },
+      "by_risk": {
+        "R0": 11.76,
+        "R1": 10.58,
+        "R2": 11.74,
+        "R3": 13.17,
+        "R4": 12.6,
+        "R5": 12.5
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 42,
+          "composite": 11.7,
+          "dimensions": {
+            "meaning": 3.53,
+            "context": 3.23,
+            "safety": 2.45,
+            "rating": 2.5
+          },
+          "by_risk": {
+            "R0": 11.38,
+            "R1": 11.6,
+            "R2": 12.39,
+            "R3": 13.2,
+            "R4": 10.1,
+            "R5": 12.15
+          }
+        },
+        "updated": {
+          "n_evaluated": 85,
+          "composite": 12.14,
+          "dimensions": {
+            "meaning": 3.24,
+            "context": 3.25,
+            "safety": 2.77,
+            "rating": 2.88
+          },
+          "by_risk": {
+            "R0": 12.11,
+            "R1": 10.29,
+            "R2": 11.52,
+            "R3": 13.16,
+            "R4": 13.18,
+            "R5": 12.62
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "GPT-4o-mini",
+      "family": "OpenAI",
+      "vendor_id": "",
+      "n_evaluated": 239,
+      "composite": 11.34,
+      "dimensions": {
+        "meaning": 3.37,
+        "context": 3.09,
+        "safety": 2.15,
+        "rating": 2.73
+      },
+      "by_risk": {
+        "R0": 11.87,
+        "R1": 9.41,
+        "R2": 11.44,
+        "R3": 11.01,
+        "R4": 11.02,
+        "R5": 10.26
+      },
+      "splits": {
+        "original": {
+          "n_evaluated": 100,
+          "composite": 11.61,
+          "dimensions": {
+            "meaning": 3.75,
+            "context": 3.26,
+            "safety": 2.15,
+            "rating": 2.45
+          },
+          "by_risk": {
+            "R0": 12.01,
+            "R1": 10.75,
+            "R2": 11.96,
+            "R3": 10.18,
+            "R4": 9.62,
+            "R5": 10.7
+          }
+        },
+        "updated": {
+          "n_evaluated": 139,
+          "composite": 11.14,
+          "dimensions": {
+            "meaning": 3.1,
+            "context": 2.97,
+            "safety": 2.14,
+            "rating": 2.93
+          },
+          "by_risk": {
+            "R0": 11.74,
+            "R1": 9.0,
+            "R2": 11.01,
+            "R3": 11.49,
+            "R4": 11.36,
+            "R5": 10.1
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "",
+      "partial_coverage": false
+    },
+    {
+      "model": "Haiku 3.0",
+      "family": "Claude",
+      "vendor_id": "",
+      "n_evaluated": 81,
+      "composite": 10.35,
+      "dimensions": {
+        "meaning": 2.62,
+        "context": 2.44,
+        "safety": 2.29,
+        "rating": 2.99
+      },
+      "by_risk": {
+        "R0": 11.25,
+        "R1": 9.16,
+        "R2": 9.86,
+        "R3": 8.68,
+        "R4": 10.36,
+        "R5": 8.98
+      },
+      "splits": {
+        "updated": {
+          "n_evaluated": 81,
+          "composite": 10.35,
+          "dimensions": {
+            "meaning": 2.62,
+            "context": 2.44,
+            "safety": 2.29,
+            "rating": 2.99
+          },
+          "by_risk": {
+            "R0": 11.25,
+            "R1": 9.16,
+            "R2": 9.86,
+            "R3": 8.68,
+            "R4": 10.36,
+            "R5": 8.98
+          }
+        }
+      },
+      "critical_failures": null,
+      "evaluated_date": "2026-05",
+      "cohort": "paper",
+      "notes": "evaluated on 81 expressions; excluded from aggregate comparisons in the paper",
+      "partial_coverage": true
+    }
+  ]
+}

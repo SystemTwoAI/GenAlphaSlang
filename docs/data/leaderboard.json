@@ -4,6 +4,7 @@
     "n_expressions": 239,
     "judge_model": "claude-opus-4-6-20260401",
     "judge_temperature": 0.0,
+    "judge_role": "canonical",
     "last_updated": "2026-07-26",
     "paper": "GenAlphaBench (NeurIPS 2026 D&B submission 3764)",
     "links": {
