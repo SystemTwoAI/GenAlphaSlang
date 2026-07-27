@@ -30,8 +30,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 # ---- fixed metadata (paper baseline) ---------------------------------------
 DATASET_VERSION = "v7.4"
 N_EXPRESSIONS = 239
-JUDGE_MODEL = "claude-opus-4-6-20260401"
-JUDGE_TEMPERATURE = 0.0
 PAPER = "GenAlphaBench (NeurIPS 2026 D&B submission 3764)"
 LINKS = {
     "dataset": "https://huggingface.co/datasets/systemtwoai/GenAlphaBench",
@@ -86,6 +84,24 @@ EXPECTED_N = {
     "GPT-4o": 236, "Gemini-2.0-Flash": 198, "GPT-4o-mini": 236, "Haiku 3.0": 81,
 }
 
+# GPT-5.5 cross-judge regression values. NOT published paper numbers: these
+# are pinned from the maintainer-provided gpt55 CSV at first build (2026-07-26)
+# so CI catches any silent drift, in the same spirit as the Table-2 gate.
+GPT55_COMPOSITES = {
+    "Opus 4.7": 17.47, "Opus 4.6": 16.93, "o3": 16.58, "Sonnet 4.6": 16.47,
+    "Opus 4.5": 16.41, "Gemini-2.5-Pro": 16.13, "Opus 4.0": 15.29,
+    "GPT-4.1": 15.24, "Gemini-2.5-Flash": 14.96, "Haiku 4.5": 14.59,
+    "Sonnet 4.0": 14.58, "o4-mini": 14.49, "GPT-4o": 13.27,
+    "Gemini-2.0-Flash": 11.99, "GPT-4o-mini": 11.34, "Haiku 3.0": 10.35,
+}
+GPT55_EXPECTED_N = {
+    "Opus 4.7": 239, "Opus 4.6": 239, "o3": 238, "Sonnet 4.6": 238,
+    "Opus 4.5": 239, "Gemini-2.5-Pro": 239, "Opus 4.0": 239, "GPT-4.1": 239,
+    "Gemini-2.5-Flash": 239, "Haiku 4.5": 239, "Sonnet 4.0": 239,
+    "o4-mini": 236, "GPT-4o": 237, "Gemini-2.0-Flash": 127,
+    "GPT-4o-mini": 239, "Haiku 3.0": 81,
+}
+
 STANDING_FOOTNOTES = [
     "Haiku 3.0 was evaluated on 81 of 239 expressions and is excluded from aggregate comparisons; it is shown for reference only. Its two judged totals of 0 are retained as real scores, matching the paper.",
     "Cleaning: rows flagged missing are dropped, and any (expression, model) pair whose judged total is exactly 0 is treated as an unjudged/empty response and removed before averaging (affects o3 ×1 and o4-mini ×3).",
@@ -95,6 +111,38 @@ STANDING_FOOTNOTES = [
 # Appended by the maintainer when the first post-paper model lands (spec §5.3):
 # "Solo-judging calibration: GPT-4.1 scores X.XX solo vs 18.04 in-context; ..."
 CALIBRATION_FOOTNOTE = ""
+
+GPT55_FOOTNOTES = [
+    "GPT-5.5 is the cross-judge used for consistency validation (paper §4.2). The canonical leaderboard uses the pinned Opus 4.6 judge; scores are NOT directly comparable across judges.",
+    "Haiku 3.0 was evaluated on 81 of 239 expressions and is excluded from aggregate comparisons; it is shown for reference only.",
+    "Cleaning: rows flagged missing are dropped, and any (expression, model) pair whose judged total is exactly 0 is treated as an unjudged/empty response and removed before averaging (under this judge: Gemini-2.0-Flash ×96, hence its n of 127).",
+]
+
+# ---- per-judge build configuration ------------------------------------------
+JUDGES = {
+    "opus46": {
+        "csv": "results/scores/opus46_all239_per_dimension_long.csv",
+        "out": "docs/data/leaderboard.json",
+        "judge_model": "claude-opus-4-6-20260401",
+        "judge_temperature": 0.0,
+        "judge_role": "canonical",
+        "gate_composites": TABLE2_COMPOSITES,
+        "gate_n": EXPECTED_N,
+        "gate_name": "Table 2 (published)",
+        "footnotes": None,  # STANDING_FOOTNOTES (+ calibration), set in main()
+    },
+    "gpt55": {
+        "csv": "results/scores/gpt55_all239_per_dimension_long.csv",
+        "out": "docs/data/leaderboard_gpt55.json",
+        "judge_model": "gpt-5.5",
+        "judge_temperature": 0.0,
+        "judge_role": "cross-judge",
+        "gate_composites": GPT55_COMPOSITES,
+        "gate_n": GPT55_EXPECTED_N,
+        "gate_name": "pinned regression values (first build 2026-07-26)",
+        "footnotes": GPT55_FOOTNOTES,
+    },
+}
 
 
 def git_date_of(path):
@@ -185,24 +233,24 @@ def build(rows):
     return entries
 
 
-def acceptance_test(entries):
+def acceptance_test(entries, gate_composites, gate_n, gate_name):
     failures = []
     got = {e["model"]: e for e in entries if e["cohort"] == "paper"}
-    for model, expected in TABLE2_COMPOSITES.items():
+    for model, expected in gate_composites.items():
         if model not in got:
             failures.append(f"missing paper-cohort model: {model}")
             continue
         g = got[model]
         if abs(g["composite"] - expected) > 0.005:
             failures.append(
-                f"composite mismatch {model}: got {g['composite']:.2f}, Table 2 says {expected:.2f}"
+                f"composite mismatch {model}: got {g['composite']:.2f}, {gate_name} says {expected:.2f}"
             )
-        if g["n_evaluated"] != EXPECTED_N[model]:
+        if g["n_evaluated"] != gate_n[model]:
             failures.append(
-                f"n_evaluated mismatch {model}: got {g['n_evaluated']}, expected {EXPECTED_N[model]}"
+                f"n_evaluated mismatch {model}: got {g['n_evaluated']}, expected {gate_n[model]}"
             )
     if failures:
-        print("\nACCEPTANCE TEST FAILED — refusing to write leaderboard.json")
+        print(f"\nACCEPTANCE TEST FAILED vs {gate_name} — refusing to write output")
         for f in failures:
             print(f"  - {f}")
         o3 = got.get("o3", {}).get("composite")
@@ -213,42 +261,40 @@ def acceptance_test(entries):
                 "(validate_scores.py rule 3) is not being applied."
             )
         sys.exit(1)
-    print("Acceptance test PASSED: Table 2 reproduced exactly; expected n's match.")
+    print(f"Acceptance test PASSED vs {gate_name}: composites and n's match.")
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default="results/scores/opus46_all239_per_dimension_long.csv")
-    ap.add_argument("--out", default="docs/data/leaderboard.json")
-    ap.add_argument("--skip-acceptance", action="store_true",
-                    help="Skip the Table-2 gate (never use for a published build).")
-    args = ap.parse_args()
-
-    csv_path = REPO_ROOT / args.csv
-    rows, report = load_and_clean(csv_path, verbose=True)
+def build_judge(judge_key, skip_acceptance=False):
+    cfg = JUDGES[judge_key]
+    csv_path = REPO_ROOT / cfg["csv"]
+    rows, report = load_and_clean(csv_path, verbose=True, judge=judge_key)
     if report["problems"]:
         print(f"\nFATAL: validate_scores reported {len(report['problems'])} problem(s); fix before building.")
         sys.exit(1)
 
     entries = build(rows)
-    if not args.skip_acceptance:
-        acceptance_test(entries)
+    if not skip_acceptance:
+        acceptance_test(entries, cfg["gate_composites"], cfg["gate_n"], cfg["gate_name"])
 
-    footnotes = list(STANDING_FOOTNOTES)
-    if CALIBRATION_FOOTNOTE:
-        footnotes.append(CALIBRATION_FOOTNOTE)
-    if any(e["cohort"] == "post-paper" for e in entries) and not CALIBRATION_FOOTNOTE:
-        print(
-            "WARNING: post-paper entries exist but CALIBRATION_FOOTNOTE is empty. "
-            "Spec §5.3 requires publishing the solo-judging calibration delta."
-        )
+    if cfg["footnotes"] is not None:
+        footnotes = list(cfg["footnotes"])
+    else:
+        footnotes = list(STANDING_FOOTNOTES)
+        if CALIBRATION_FOOTNOTE:
+            footnotes.append(CALIBRATION_FOOTNOTE)
+        if any(e["cohort"] == "post-paper" for e in entries) and not CALIBRATION_FOOTNOTE:
+            print(
+                "WARNING: post-paper entries exist but CALIBRATION_FOOTNOTE is empty. "
+                "Spec §5.3 requires publishing the solo-judging calibration delta."
+            )
 
     payload = {
         "meta": {
             "dataset_version": DATASET_VERSION,
             "n_expressions": N_EXPRESSIONS,
-            "judge_model": JUDGE_MODEL,
-            "judge_temperature": JUDGE_TEMPERATURE,
+            "judge_model": cfg["judge_model"],
+            "judge_temperature": cfg["judge_temperature"],
+            "judge_role": cfg["judge_role"],
             "last_updated": git_date_of(csv_path),
             "paper": PAPER,
             "links": LINKS,
@@ -261,10 +307,24 @@ def main():
         "entries": entries,
     }
 
-    out_path = REPO_ROOT / args.out
+    out_path = REPO_ROOT / cfg["out"]
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    print(f"wrote {out_path} ({len(entries)} entries)")
+    print(f"wrote {out_path} ({len(entries)} entries)\n")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--judge", choices=list(JUDGES) + ["all"], default="all",
+                    help="Which judge's dataset to build (default: all).")
+    ap.add_argument("--skip-acceptance", action="store_true",
+                    help="Skip the acceptance gate (never use for a published build).")
+    args = ap.parse_args()
+
+    keys = list(JUDGES) if args.judge == "all" else [args.judge]
+    for key in keys:
+        print(f"=== building judge: {key} ===")
+        build_judge(key, skip_acceptance=args.skip_acceptance)
 
 
 if __name__ == "__main__":

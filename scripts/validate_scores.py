@@ -57,14 +57,27 @@ PARTIAL_COVERAGE_MODELS = {"Haiku 3.0"}
 # (maintainer decision 2026-07-26; reproduces published Table 2).
 ZERO_DROP_EXEMPT = {"Haiku 3.0"}
 
-# Expected n_evaluated after cleaning, dataset v7.4 + Opus 4.6 judge (spec §4.6).
-EXPECTED_N = {
-    "Opus 4.6": 239, "Opus 4.7": 239, "Opus 4.5": 239, "Opus 4.0": 239,
-    "Sonnet 4.6": 238, "Sonnet 4.0": 239, "Haiku 4.5": 239,
-    "o3": 235, "GPT-4.1": 236, "o4-mini": 233, "GPT-4o": 236,
-    "GPT-4o-mini": 236, "Gemini-2.5-Pro": 239, "Gemini-2.5-Flash": 239,
-    "Gemini-2.0-Flash": 198, "Haiku 3.0": 81,
+# Expected n_evaluated after cleaning, dataset v7.4, per judge.
+EXPECTED_N_BY_JUDGE = {
+    # Canonical judge (paper Table 2): claude-opus-4-6-20260401
+    "opus46": {
+        "Opus 4.6": 239, "Opus 4.7": 239, "Opus 4.5": 239, "Opus 4.0": 239,
+        "Sonnet 4.6": 238, "Sonnet 4.0": 239, "Haiku 4.5": 239,
+        "o3": 235, "GPT-4.1": 236, "o4-mini": 233, "GPT-4o": 236,
+        "GPT-4o-mini": 236, "Gemini-2.5-Pro": 239, "Gemini-2.5-Flash": 239,
+        "Gemini-2.0-Flash": 198, "Haiku 3.0": 81,
+    },
+    # GPT-5.5 cross-judge (consistency validation): zero-drop hits
+    # Gemini-2.0-Flash x96, exactly as the spec predicts.
+    "gpt55": {
+        "Opus 4.6": 239, "Opus 4.7": 239, "Opus 4.5": 239, "Opus 4.0": 239,
+        "Sonnet 4.6": 238, "Sonnet 4.0": 239, "Haiku 4.5": 239,
+        "o3": 238, "GPT-4.1": 239, "o4-mini": 236, "GPT-4o": 237,
+        "GPT-4o-mini": 239, "Gemini-2.5-Pro": 239, "Gemini-2.5-Flash": 239,
+        "Gemini-2.0-Flash": 127, "Haiku 3.0": 81,
+    },
 }
+EXPECTED_N = EXPECTED_N_BY_JUDGE["opus46"]  # back-compat default
 
 # Accept the CSV's underscore-style labels as well as display labels.
 MODEL_ALIASES = {
@@ -87,8 +100,18 @@ def _truthy(v):
     return str(v).strip().lower() in {"true", "1", "yes", "t"}
 
 
-def load_and_clean(csv_path, verbose=True):
+def infer_judge(csv_path):
+    name = str(csv_path).rsplit("/", 1)[-1]
+    for key in EXPECTED_N_BY_JUDGE:
+        if name.startswith(key):
+            return key
+    return None
+
+
+def load_and_clean(csv_path, verbose=True, judge=None):
     """Return (rows, report). rows = list of dicts after cleaning."""
+    judge = judge or infer_judge(csv_path) or "opus46"
+    expected_n = EXPECTED_N_BY_JUDGE[judge]
     problems = []
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -178,8 +201,9 @@ def load_and_clean(csv_path, verbose=True):
         print(f"distinct expressions: {n_expr}")
         print("n_evaluated per model:")
         mismatches = []
+        print(f"(judge profile: {judge})")
         for m in sorted(n_evaluated):
-            exp = EXPECTED_N.get(m)
+            exp = expected_n.get(m)
             flag = ""
             if exp is not None and exp != n_evaluated[m]:
                 flag = f"  <-- EXPECTED {exp}"
