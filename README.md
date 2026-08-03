@@ -134,6 +134,6 @@ Expression ranges are processed in three batches: `1-100`, `101-181`, `182-239`.
 
 ## 🤝 Get Involved
 
-Spotted slang we're missing? Use the suggestion box in the quiz, open an issue, or reach out at **manisha.mehta@system2ai.com**. We're especially interested in collaborations with researchers, educators, clinicians, and trust & safety teams.
+Spotted slang we're missing? Use the suggestion box in the quiz, open an issue, or reach out at **manisha.mehta@systemtwoai.com**. We're especially interested in collaborations with researchers, educators, clinicians, and trust & safety teams.
 
 <p align="center"><sub>© 2025–2026 SystemTwoAI • Built to keep AI honest about how young people actually talk.</sub></p>
