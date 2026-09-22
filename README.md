@@ -47,7 +47,7 @@ The human side of the benchmark: a web quiz that serves **10 random Gen Alpha ex
 
 **[Live leaderboard](https://systemtwoai.github.io/GenAlphaSlang/leaderboard.html)** — official GenAlphaBench scores for every evaluated model: composite /20, four dimension scores /5, per-risk-category means, and cohort provenance, viewable **combined** (all 239 expressions) or split by expression set (**original benchmark**, expressions 1–100, vs the **updated set**, 101–239), under either judge (**Opus 4.6**, canonical, or **GPT-5.5**, cross-judge consistency validation — never mixed in one table). Dataset **v7.4** (239 expressions), pinned canonical judge `claude-opus-4-6-20260401` @ temperature 0.0. Data lives in [`docs/data/leaderboard.json`](docs/data/leaderboard.json), generated — never hand-edited — by [`scripts/build_leaderboard.py`](scripts/build_leaderboard.py). See [Adding a new model](#-adding-a-new-model-to-the-leaderboard) below.
 
-## 📰 News
+##Updates
 
 - **2026-07** — Public model leaderboard launched on GitHub Pages.
 - **2026-07** — *Gen Alpha Slang Check* launched on GitHub Pages.
