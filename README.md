@@ -18,9 +18,9 @@
 
 ---
 
-## 🧪 GenAlphaSlang-Bench — *Can frontier models read the room?*
+## GenAlphaSlang-Bench: *Can frontier models read the room?*
 
-**[📄 Paper](https://arxiv.org/abs/2505.10588)** • **[💻 Model prompt & code](model_evaluation_prompt.md)** • **[⚖️ Judge prompt & code](judge_evaluation_prompt.md)**
+**[Paper](https://arxiv.org/abs/2505.10588)** • **[ Model prompt & code](model_evaluation_prompt.md)** • **[ Judge prompt & code](judge_evaluation_prompt.md)**
 
 A benchmark of **239 Gen Alpha expressions** drawn from gaming, social media, and video platforms, each annotated with a risk category:
 
@@ -35,26 +35,26 @@ A benchmark of **239 Gen Alpha expressions** drawn from gaming, social media, an
 
 **15 models** — Claude (Opus, Sonnet, Haiku), OpenAI (GPT-4.1, GPT-4o, o3, o4-mini), and Gemini (2.5 Pro/Flash, 2.0 Flash) families — are asked to explain each expression, flag safety concerns, and rate five harm dimensions (violence, targeting of marginalized communities, harassment, grooming, bullying) on a 0–5 scale. Responses are scored against annotated ground truth by a **pinned LLM judge** (`claude-opus-4-6-20260401` @ temperature 0.0 for the canonical leaderboard; a unified GPT-5.5 cross-judge scoring all 15 responses per expression in a single call is used for consistency validation — see [`judge_evaluation_prompt.md`](judge_evaluation_prompt.md)).
 
-## 🎮 Gen Alpha Slang Check — *Are You Cooked?*
+## Gen Alpha Slang Check-- Are You Cooked?!
 
-**[🕹️ Play it live](https://systemtwoai.github.io/GenAlphaSlang/)** • **[💻 Source](docs/index.html)**
+**[Play it live](https://systemtwoai.github.io/GenAlphaSlang/)** • **[Source](docs/index.html)**
 
 The human side of the benchmark: a web quiz that serves **10 random Gen Alpha expressions with 4 plausible meanings each**. Sign in and find out whether you're a *Certified Rizzler* or a *Certified NPC* 💀, and help us compare human comprehension across demographics against the models.
 
 ---
 
-## 📊 Model Leaderboard
+## Model Leaderboard
 
-**[🏆 Live leaderboard](https://systemtwoai.github.io/GenAlphaSlang/leaderboard.html)** — official GenAlphaBench scores for every evaluated model: composite /20, four dimension scores /5, per-risk-category means, and cohort provenance, viewable **combined** (all 239 expressions) or split by expression set (**original benchmark**, expressions 1–100, vs the **updated set**, 101–239), under either judge (**Opus 4.6**, canonical, or **GPT-5.5**, cross-judge consistency validation — never mixed in one table). Dataset **v7.4** (239 expressions), pinned canonical judge `claude-opus-4-6-20260401` @ temperature 0.0. Data lives in [`docs/data/leaderboard.json`](docs/data/leaderboard.json), generated — never hand-edited — by [`scripts/build_leaderboard.py`](scripts/build_leaderboard.py). See [Adding a new model](#-adding-a-new-model-to-the-leaderboard) below.
+**[Live leaderboard](https://systemtwoai.github.io/GenAlphaSlang/leaderboard.html)** — official GenAlphaBench scores for every evaluated model: composite /20, four dimension scores /5, per-risk-category means, and cohort provenance, viewable **combined** (all 239 expressions) or split by expression set (**original benchmark**, expressions 1–100, vs the **updated set**, 101–239), under either judge (**Opus 4.6**, canonical, or **GPT-5.5**, cross-judge consistency validation — never mixed in one table). Dataset **v7.4** (239 expressions), pinned canonical judge `claude-opus-4-6-20260401` @ temperature 0.0. Data lives in [`docs/data/leaderboard.json`](docs/data/leaderboard.json), generated — never hand-edited — by [`scripts/build_leaderboard.py`](scripts/build_leaderboard.py). See [Adding a new model](#-adding-a-new-model-to-the-leaderboard) below.
 
 ## 📰 News
 
-- **2026-07** — 🏆 Public **model leaderboard** launched on GitHub Pages.
+- **2026-07** — Public model leaderboard launched on GitHub Pages.
 - **2026-07** — *Gen Alpha Slang Check* launched on GitHub Pages.
 - **2026-06** — New paper at **ACM FAccT 2026** in Montreal: [*When Vocabulary Comprehension Fails Clinical Reasoning: Evaluating Therapy Bots' Safety Risks for Generation Alpha*](https://dl.acm.org/doi/10.1145/3805689.3806522).
 - **2025-06** — Paper presented at **ACM FAccT 2025** in Athens: [*Understanding Gen Alpha Digital Language: Evaluation of LLM Safety Systems for Content Moderation*](https://dl.acm.org/doi/full/10.1145/3715275.3732184) Coverage in [Fast Company](https://www.fastcompany.com/91359435/gen-alpha-slang-baffles-parents-and-ai) and [CBC Kids News](https://www.cbc.ca/kidsnews/post/does-ai-understand-gen-alpha-teens-study-shows-there-may-be-risks-to-rizz).
 
-## 🚀 Quick Start
+## Quick Start
 
 **Try the quiz :** [systemtwoai.github.io/GenAlphaSlang](https://systemtwoai.github.io/GenAlphaSlang/)
 
@@ -89,7 +89,7 @@ Expression ranges are processed in three batches: `1-100`, `101-181`, `182-239`.
 
    Paper-cohort numbers must not move. Commit CSV + JSON + raw files together.
 
-## 📂 Repository Layout
+## Repository Layout
 
 ```
 ├── model_evaluation_prompt.md   # Prompt + scripts for evaluating each model
@@ -102,14 +102,14 @@ Expression ranges are processed in three batches: `1-100`, `101-181`, `182-239`.
 │   └── raw/                     # Raw model/judge outputs (append-only)
 ├── docs/
 │   ├── index.html               # "Are You Cooked?" quiz (GitHub Pages)
-│   ├── leaderboard.html         # 🏆 Model leaderboard (GitHub Pages)
+│   ├── leaderboard.html         # Model leaderboard (GitHub Pages)
 │   ├── data/leaderboard.json    # Canonical (Opus 4.6 judge) — never hand-edited
 │   ├── data/leaderboard_gpt55.json  # GPT-5.5 cross-judge — never hand-edited
 │   └── share-card.png           # Social share card
 └── LICENSE                      # GPL-3.0
 ```
 
-## 📖 Citation
+## Citation
 
 ```bibtex
 @inproceedings{mehta2025genalpha,
@@ -132,7 +132,7 @@ Expression ranges are processed in three batches: `1-100`, `101-181`, `182-239`.
 }
 ```
 
-## 🤝 Get Involved
+## Get Involved
 
 Spotted slang we're missing? Use the suggestion box in the quiz, open an issue, or reach out at **manisha.mehta@systemtwoai.com**. We're especially interested in collaborations with researchers, educators, clinicians, and trust & safety teams.
 
