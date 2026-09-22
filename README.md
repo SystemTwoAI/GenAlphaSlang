@@ -1,7 +1,7 @@
 <h1 align="center">GenAlphaSlang</h1>
 
 <p align="center">
-  <b>Does AI actually understand how kids talk online? A benchmark for Gen Alpha slang comprehension — and what the gaps mean for youth safety.</b>
+  <b>Does AI actually understand how kids talk online? A benchmark for Gen Alpha slang comprehension...and what the gaps mean for youth safety.</b>
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@ A benchmark of **239 Gen Alpha expressions** drawn from gaming, social media, an
 
 **[🕹️ Play it live](https://systemtwoai.github.io/GenAlphaSlang/)** • **[💻 Source](docs/index.html)**
 
-The human side of the benchmark: a web quiz that serves **10 random Gen Alpha expressions with 4 plausible meanings each**. Sign in and find out whether you're a *Certified Rizzler* or a *Certified NPC* 💀 — and help us compare human comprehension across demographics against the models.
+The human side of the benchmark: a web quiz that serves **10 random Gen Alpha expressions with 4 plausible meanings each**. Sign in and find out whether you're a *Certified Rizzler* or a *Certified NPC* 💀, and help us compare human comprehension across demographics against the models.
 
 ---
 
@@ -56,7 +56,7 @@ The human side of the benchmark: a web quiz that serves **10 random Gen Alpha ex
 
 ## 🚀 Quick Start
 
-**Try the quiz (no install):** [systemtwoai.github.io/GenAlphaSlang](https://systemtwoai.github.io/GenAlphaSlang/)
+**Try the quiz :** [systemtwoai.github.io/GenAlphaSlang](https://systemtwoai.github.io/GenAlphaSlang/)
 
 **Reproduce the evaluation:**
 
